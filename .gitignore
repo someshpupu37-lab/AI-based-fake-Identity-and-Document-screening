@@ -1,0 +1,11 @@
+
+.conda.zip
+.kilo/
+.vscode/
+backend/venv/
+venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+backend/sih26188.db

@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>VeriShield | Secure Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --bg: #030b12;
+            --bg2: #061821;
+            --panel: rgba(7, 29, 38, 0.88);
+            --primary: #14b8a6;
+            --primary-light: #5eead4;
+            --text: #e8fffb;
+            --muted: #7fa39f;
+            --success: #34d399;
+            --danger: #fb7185;
+            --border: rgba(94, 234, 212, .15);
+            --border-hover: rgba(94, 234, 212, .38);
+        }
+        
+        html,
+        body {
+            min-height: 100%;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: radial-gradient( circle at 15% 20%, rgba(20, 184, 166, .14), transparent 28%), radial-gradient( circle at 85% 75%, rgba(94, 234, 212, .10), transparent 25%), linear-gradient( 135deg, #02080e, #061821 55%, #031118);
+            overflow: hidden;
+        }
+        /* =====================================================
+           BACKGROUND ORBS
+        ====================================================== */
+        
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: .16;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .orb-one {
+            width: 300px;
+            height: 300px;
+            left: -100px;
+            top: -80px;
+            background: #14b8a6;
+        }
+        
+        .orb-two {
+            width: 340px;
+            height: 340px;
+            right: -120px;
+            bottom: -100px;
+            background: #0f766e;
+            animation-delay: -4s;
+        }
+        
+        .orb-three {
+            width: 180px;
+            height: 180px;
+            left: 45%;
+            top: 50%;
+            background: #5eead4;
+            animation-delay: -7s;
+        }
+        
+        @keyframes float {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(30px, -20px) scale(1.12);
+            }
+        }
+        /* =====================================================
+           LOGIN WRAPPER
+        ====================================================== */
+        
+        .login-wrapper {
+            width: min( 1000px, 100%);
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            background: rgba(4, 17, 24, .86);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, .38);
+            animation: wrapperIn .8s ease both;
+        }
+        
+        @keyframes wrapperIn {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        /* =====================================================
+           LEFT PANEL
+        ====================================================== */
+        
+        .visual-panel {
+            position: relative;
+            padding: 48px;
+            min-height: 610px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient( 145deg, rgba(15, 118, 110, .24), rgba(3, 18, 27, .96));
+        }
+        
+        .visual-panel::after {
+            content: "";
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            right: -140px;
+            top: -140px;
+            border-radius: 50%;
+            background: rgba(94, 234, 212, .06);
+            animation: slowRotate 12s linear infinite;
+        }
+        
+        @keyframes slowRotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* =====================================================
+           BRAND
+        ====================================================== */
+        
+        .brand {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            color: #022c2b;
+            font-size: 14px;
+            font-weight: 900;
+            background: linear-gradient( 135deg, var(--primary-light), var(--primary));
+            box-shadow: 0 0 30px rgba(20, 184, 166, .28);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 22px rgba(20, 184, 166, .22);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(20, 184, 166, .5);
+            }
+        }
+        
+        .brand-text h1 {
+            font-size: 19px;
+            letter-spacing: .4px;
+        }
+        
+        .brand-text p {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 4px;
+        }
+        /* =====================================================
+           VISUAL CONTENT
+        ====================================================== */
+        
+        .visual-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .badge {
+            display: inline-flex;
+            padding: 7px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: rgba(20, 184, 166, .08);
+            color: var(--primary-light);
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .visual-content h2 {
+            margin-top: 20px;
+            max-width: 470px;
+            font-size: 44px;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            background: linear-gradient( 90deg, #f0fffd, #5eead4, #99f6e4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .visual-content>p {
+            max-width: 450px;
+            margin-top: 18px;
+            color: #89aaa6;
+            line-height: 1.75;
+            font-size: 12px;
+        }
+        /* =====================================================
+           FEATURES
+        ====================================================== */
+        
+        .features {
+            display: grid;
+            gap: 12px;
+            margin-top: 28px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 0;
+        }
+        
+        .feature-icon {
+            width: 37px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: var(--primary-light);
+            background: rgba(20, 184, 166, .08);
+            border: 1px solid rgba( 94, 234, 212, .10);
+        }
+        
+        .feature-text strong {
+            display: block;
+            font-size: 11px;
+        }
+        
+        .feature-text span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+        
+        .visual-footer {
+            position: relative;
+            z-index: 2;
+            color: var(--muted2, #5f817d);
+            font-size: 9px;
+        }
+        /* =====================================================
+           RIGHT LOGIN PANEL
+        ====================================================== */
+        
+        .login-panel {
+            padding: 48px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(5, 22, 30, .92);
+        }
+        
+        .login-header {
+            margin-bottom: 28px;
+        }
+        
+        .login-header h2 {
+            font-size: 27px;
+        }
+        
+        .login-header p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        /* =====================================================
+           FORM
+        ====================================================== */
+        
+        .form-group {
+            margin-bottom: 17px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #b9d8d4;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        .input-wrap {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 14px;
+            pointer-events: none;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 13px 42px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            background: rgba(3, 15, 22, .76);
+            color: var(--text);
+            font-size: 11px;
+            transition: .25s ease;
+        }
+        
+        .form-input::placeholder {
+            color: #52736f;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, .08);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .password-toggle:hover {
+            color: var(--primary-light);
+        }
+        /* =====================================================
+           OPTIONS
+        ====================================================== */
+        
+        .login-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 4px 0 22px;
+        }
+        
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 9px;
+            cursor: pointer;
+        }
+        
+        .remember input {
+            accent-color: var(--primary);
+        }
+        
+        .forgot {
+            color: var(--primary-light);
+            font-size: 9px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .forgot:hover {
+            text-decoration: underline;
+        }
+        /* =====================================================
+           LOGIN BUTTON
+        ====================================================== */
+        
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #022c2b;
+            background: linear-gradient( 135deg, var(--primary-light), var(--primary));
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 8px 25px rgba(20, 184, 166, .16);
+            transition: .3s ease;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(20, 184, 166, .30);
+        }
+        
+        .login-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* =====================================================
+           DEMO MESSAGE
+        ====================================================== */
+        
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 11px 12px;
+            border-radius: 9px;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+        
+        .message.error {
+            display: block;
+            color: var(--danger);
+            background: rgba(251, 113, 133, .07);
+            border: 1px solid rgba(251, 113, 133, .14);
+        }
+        
+        .message.success {
+            display: block;
+            color: var(--success);
+            background: rgba(52, 211, 153, .07);
+            border: 1px solid rgba(52, 211, 153, .14);
+        }
+        /* =====================================================
+           DEMO CREDENTIAL
+        ====================================================== */
+        
+        .demo-box {
+            margin-top: 22px;
+            padding: 13px;
+            border: 1px solid rgba(94, 234, 212, .08);
+            border-radius: 10px;
+            background: rgba(20, 184, 166, .035);
+        }
+        
+        .demo-box strong {
+            display: block;
+            color: var(--primary-light);
+            font-size: 9px;
+            margin-bottom: 5px;
+        }
+        
+        .demo-box span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            line-height: 1.6;
+        }
+        /* =====================================================
+           SECURITY
+        ====================================================== */
+        
+        .security {
+            margin-top: 23px;
+            text-align: center;
+            color: #52736f;
+            font-size: 8px;
+            line-height: 1.6;
+        }
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+        
+        @media(max-width:850px) {
+            body {
+                overflow-y: auto;
+            }
+            .login-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 510px;
+            }
+            .visual-panel {
+                min-height: auto;
+                padding: 32px;
+            }
+            .visual-content h2 {
+                font-size: 34px;
+            }
+            .features {
+                grid-template-columns: 1fr 1fr;
+            }
+            .visual-footer {
+                margin-top: 25px;
+            }
+            .login-panel {
+                padding: 36px 32px;
+            }
+        }
+        
+        @media(max-width:550px) {
+            body {
+                padding: 12px;
+            }
+            .visual-panel,
+            .login-panel {
+                padding: 27px 22px;
+            }
+            .visual-content h2 {
+                font-size: 30px;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .login-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- BACKGROUND -->
+
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+
+
+    <div class="login-wrapper">
+
+
+        <!-- =====================================================
+         LEFT
+    ====================================================== -->
+
+        <section class="visual-panel">
+
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    VS
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>
+                        VeriShield
+                    </h1>
+
+                    <p>
+                        SIH26188 • Identity Intelligence
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="visual-content">
+
+                <div class="badge">
+                    ● Secure Verification Platform
+                </div>
+
+
+                <h2>
+                    Identity Security Starts Here.
+                </h2>
+
+
+                <p>
+                    Access the VeriShield command center to perform AI-assisted identity and document screening, verification analysis and risk assessment.
+                </p>
+
+
+                <div class="features">
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon">
+                            🔎
+                        </div>
+
+                        <div class="feature-text">
+
+                            <strong>
+                            Intelligent OCR
+                        </strong>
+
+                            <span>
+                            Extract document information
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon">
+                            🛡
+                        </div>
+
+                        <div class="feature-text">
+
+                            <strong>
+                            Risk Screening
+                        </strong>
+
+                            <span>
+                            Analyze verification risk
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon">
+                            ✓
+                        </div>
+
+                        <div class="feature-text">
+
+                            <strong>
+                            Document Validation
+                        </strong>
+
+                            <span>
+                            Check extracted identity fields
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="visual-footer">
+
+                Smart India Hackathon 2026 • Prototype Environment
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+        <section class="login-panel">
+
+
+            <div class="login-header">
+
+                <h2>
+                    Welcome Back
+                </h2>
+
+                <p>
+                    Sign in to access your VeriShield verification dashboard.
+                </p>
+
+            </div>
+
+
+            <form id="loginForm" autocomplete="on">
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                    Email / Username
+                </label>
+
+                    <div class="input-wrap">
+
+                        <span class="input-icon">
+                        ◉
+                    </span>
+
+                        <input type="text" id="email" class="form-input" placeholder="Enter your username" autocomplete="username" required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                    Password
+                </label>
+
+                    <div class="input-wrap">
+
+                        <span class="input-icon">
+                        ●
+                    </span>
+
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password" autocomplete="current-password" required>
+
+                        <button type="button" class="password-toggle" id="togglePassword">
+                        Show
+                    </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-options">
+
+                    <label class="remember">
+
+                    <input
+                        type="checkbox"
+                        id="remember"
+                    >
+
+                    Remember me
+
+                </label>
+
+
+                    <a href="#" class="forgot" id="forgotPassword">
+                    Forgot password?
+                </a>
+
+                </div>
+
+
+                <button type="submit" class="login-button" id="loginButton">
+                Sign In to VeriShield
+            </button>
+
+
+                <div id="message" class="message">
+                </div>
+
+
+            </form>
+
+
+            <div class="demo-box">
+
+                <strong>
+                DEMO LOGIN
+            </strong>
+
+                <span>
+                Username: admin
+            </span>
+
+                <span>
+                Password: verishield
+            </span>
+
+            </div>
+
+
+            <div class="security">
+
+                🔒 Prototype login — authentication is simulated locally for demonstration purposes.
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+    <script>
+        /* ============================================================
+           ELEMENTS
+        ============================================================ */
+
+        var loginForm =
+            document.getElementById(
+                "loginForm"
+            );
+
+        var usernameInput =
+            document.getElementById(
+                "email"
+            );
+
+        var passwordInput =
+            document.getElementById(
+                "password"
+            );
+
+        var togglePassword =
+            document.getElementById(
+                "togglePassword"
+            );
+
+        var loginButton =
+            document.getElementById(
+                "loginButton"
+            );
+
+        var message =
+            document.getElementById(
+                "message"
+            );
+
+        var remember =
+            document.getElementById(
+                "remember"
+            );
+
+        var forgotPassword =
+            document.getElementById(
+                "forgotPassword"
+            );
+
+
+        /* ============================================================
+           SHOW / HIDE PASSWORD
+        ============================================================ */
+
+        togglePassword.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    passwordInput.type ===
+                    "password"
+                ) {
+
+                    passwordInput.type =
+                        "text";
+
+                    togglePassword.textContent =
+                        "Hide";
+
+                } else {
+
+                    passwordInput.type =
+                        "password";
+
+                    togglePassword.textContent =
+                        "Show";
+                }
+
+            }
+        );
+
+
+        /* ============================================================
+           MESSAGE
+        ============================================================ */
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                "message " +
+                type;
+        }
+
+
+        /* ============================================================
+           LOGIN
+        ============================================================ */
+
+        loginForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                var username =
+                    usernameInput.value
+                    .trim();
+
+                var password =
+                    passwordInput.value;
+
+
+                showMessage(
+                    "",
+                    ""
+                );
+
+
+                if (!username ||
+                    !password
+                ) {
+
+                    showMessage(
+                        "Please enter both username and password.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                loginButton.disabled =
+                    true;
+
+                loginButton.textContent =
+                    "Authenticating...";
+
+
+                setTimeout(
+                    function() {
+
+                        /*
+                         * DEMO AUTHENTICATION
+                         *
+                         * Username:
+                         * admin
+                         *
+                         * Password:
+                         * verishield
+                         */
+
+                        if (
+                            username.toLowerCase() ===
+                            "admin" &&
+                            password ===
+                            "verishield"
+                        ) {
+
+                            if (
+                                remember.checked
+                            ) {
+
+                                localStorage.setItem(
+                                    "verishieldLoggedIn",
+                                    "true"
+                                );
+
+                            } else {
+
+                                sessionStorage.setItem(
+                                    "verishieldLoggedIn",
+                                    "true"
+                                );
+                            }
+
+
+                            showMessage(
+                                "Login successful. Opening dashboard...",
+                                "success"
+                            );
+
+
+                            setTimeout(
+                                function() {
+
+                                    window.location.href =
+                                        "index.html";
+
+                                },
+                                700
+                            );
+
+                        } else {
+
+                            showMessage(
+                                "Invalid username or password.",
+                                "error"
+                            );
+
+                            loginButton.disabled =
+                                false;
+
+                            loginButton.textContent =
+                                "Sign In to VeriShield";
+                        }
+
+                    },
+                    700
+                );
+
+            }
+        );
+
+
+        /* ============================================================
+           FORGOT PASSWORD
+        ============================================================ */
+
+        forgotPassword.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                showMessage(
+                    "Password recovery is not connected in this prototype.",
+                    "error"
+                );
+
+            }
+        );
+
+
+        /* ============================================================
+           OPTIONAL: ENTER SUBMISSION
+        ============================================================ */
+
+        passwordInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    loginForm.requestSubmit();
+
+                }
+
+            }
+        );
+    </script>
+
+
+</body>
+
+</html>

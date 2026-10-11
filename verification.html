@@ -1,0 +1,2924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>VeriShield | Document Verification</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg: #06131b;
+            --panel: #081c25;
+            --card: #0b232d;
+            --primary: #14b8a6;
+            --primary2: #5eead4;
+            --blue: #2563eb;
+            --text: #e8fffb;
+            --muted: #86a8a4;
+            --line: rgba(94, 234, 212, .14);
+            --success: #34d399;
+            --warning: #fbbf24;
+            --danger: #fb7185;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: radial-gradient( circle at 10% 10%, rgba(20, 184, 166, .13), transparent 28%), radial-gradient( circle at 90% 90%, rgba(37, 99, 235, .10), transparent 28%), linear-gradient( 135deg, #030b12, #061821 60%, #031118);
+            overflow-x: hidden;
+        }
+        
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* =========================================================
+   BACKGROUND
+========================================================= */
+        
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: .13;
+            z-index: -1;
+            animation: orbFloat 10s ease-in-out infinite;
+        }
+        
+        .orb1 {
+            width: 300px;
+            height: 300px;
+            left: -100px;
+            top: -80px;
+            background: #14b8a6;
+        }
+        
+        .orb2 {
+            width: 330px;
+            height: 330px;
+            right: -110px;
+            bottom: -100px;
+            background: #2563eb;
+            animation-delay: -4s;
+        }
+        
+        @keyframes orbFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(25px, -20px) scale(1.1);
+            }
+        }
+        /* =========================================================
+   NAVBAR
+========================================================= */
+        
+        .navbar {
+            position: fixed;
+            top: 16px;
+            left: 24px;
+            right: 24px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 15px;
+            z-index: 500;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: rgba(3, 15, 22, .84);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .22);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+        
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: linear-gradient( 135deg, var(--primary2), var(--primary));
+            color: #022c2b;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 0 25px rgba(20, 184, 166, .25);
+        }
+        
+        .brand-text h2 {
+            font-size: 16px;
+        }
+        
+        .brand-text p {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .nav a {
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: #8db1ad;
+            font-size: 11px;
+            transition: .2s ease;
+        }
+        
+        .nav a:hover,
+        .nav a.active {
+            background: rgba(20, 184, 166, .08);
+            color: var(--primary2);
+        }
+        
+        .online {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 11px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            color: var(--primary2);
+            font-size: 9px;
+        }
+        
+        .online-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 9px var(--success);
+        }
+        /* =========================================================
+   MAIN
+========================================================= */
+        
+        .main {
+            width: min(1400px, 92%);
+            margin: auto;
+            padding: 108px 0 60px;
+        }
+        /* =========================================================
+   HEADER
+========================================================= */
+        
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .eyebrow {
+            color: var(--primary);
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.1px;
+            margin-bottom: 7px;
+        }
+        
+        .page-title {
+            font-size: 29px;
+        }
+        
+        .subtitle {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 6px;
+        }
+        
+        .back {
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            color: #b4ceca;
+            background: rgba(255, 255, 255, .025);
+            font-size: 10px;
+            transition: .2s ease;
+        }
+        
+        .back:hover {
+            color: var(--primary2);
+            border-color: rgba(94, 234, 212, .35);
+        }
+        /* =========================================================
+   PROCESS STEPS
+========================================================= */
+        
+        .steps {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0;
+            margin-bottom: 24px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #5f817d;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        
+        .step.active {
+            color: var(--primary2);
+        }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #102832;
+            color: #72918d;
+        }
+        
+        .step.active .step-number {
+            background: linear-gradient( 135deg, var(--primary), var(--blue));
+            color: white;
+        }
+        
+        .step-line {
+            width: 55px;
+            height: 1px;
+            margin: 0 10px;
+            background: rgba(94, 234, 212, .12);
+        }
+        /* =========================================================
+   GRID
+========================================================= */
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1.3fr .7fr;
+            gap: 18px;
+        }
+        /* =========================================================
+   CARD
+========================================================= */
+        
+        .card {
+            padding: 23px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(7, 29, 38, .87);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .14);
+        }
+        
+        .card h2 {
+            font-size: 17px;
+        }
+        
+        .card-description {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.6;
+            margin-top: 6px;
+            margin-bottom: 18px;
+        }
+        /* =========================================================
+   DOCUMENT TYPE
+========================================================= */
+        
+        .field-label {
+            display: block;
+            color: #a8c6c2;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin-bottom: 6px;
+        }
+        
+        .select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: #061821;
+            color: var(--text);
+            outline: none;
+            font-size: 10px;
+        }
+        
+        .select:focus {
+            border-color: var(--primary);
+        }
+        /* =========================================================
+   UPLOAD
+========================================================= */
+        
+        .upload {
+            margin-top: 16px;
+            min-height: 230px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px dashed rgba(94, 234, 212, .25);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: .25s ease;
+            background: radial-gradient( circle, rgba(20, 184, 166, .07), transparent 68%);
+        }
+        
+        .upload:hover,
+        .upload.drag {
+            border-color: var(--primary2);
+            background: radial-gradient( circle, rgba(20, 184, 166, .12), transparent 68%);
+            transform: translateY(-2px);
+        }
+        
+        .upload-icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+            animation: uploadFloat 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes uploadFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+        
+        .upload h3 {
+            font-size: 14px;
+        }
+        
+        .upload p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+        
+        .choose {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 10px 17px;
+            border-radius: 8px;
+            background: linear-gradient( 135deg, var(--primary), var(--blue));
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        /* =========================================================
+   PREVIEW
+========================================================= */
+        
+        .preview {
+            display: none;
+            margin-top: 16px;
+        }
+        
+        .preview.show {
+            display: block;
+        }
+        
+        .preview-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        
+        .remove {
+            border: none;
+            background: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 9px;
+            font-weight: 800;
+        }
+        
+        .preview img {
+            width: 100%;
+            max-height: 360px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: #061821;
+        }
+        
+        .file-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .file-info {
+            padding: 10px;
+            background: rgba(255, 255, 255, .025);
+            border: 1px solid rgba(94, 234, 212, .07);
+            border-radius: 8px;
+        }
+        
+        .file-info span {
+            display: block;
+            color: #64837f;
+            font-size: 8px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        
+        .file-info strong {
+            font-size: 10px;
+            word-break: break-word;
+        }
+        /* =========================================================
+   QUALITY ASSISTANT
+========================================================= */
+        
+        .quality {
+            display: none;
+            margin-top: 17px;
+            padding: 16px;
+            border-radius: 12px;
+            background: linear-gradient( 135deg, rgba(20, 184, 166, .07), rgba(37, 99, 235, .04));
+            border: 1px solid rgba(94, 234, 212, .12);
+            animation: fadeIn .35s ease;
+        }
+        
+        .quality.show {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(7px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .quality-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .quality-head h3 {
+            font-size: 13px;
+        }
+        
+        .quality-head p {
+            color: var(--muted);
+            font-size: 8px;
+            margin-top: 3px;
+        }
+        
+        .q-score {
+            font-size: 19px;
+            font-weight: 900;
+            color: var(--primary2);
+        }
+        
+        .q-level {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            color: #a7f3d0;
+            background: rgba(52, 211, 153, .08);
+            font-size: 8px;
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+        
+        .q-checks {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 11px;
+        }
+        
+        .q-check {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, .025);
+            font-size: 9px;
+        }
+        
+        .q-status {
+            font-size: 8px;
+            font-weight: 800;
+        }
+        
+        .q-title {
+            font-size: 9px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        
+        .q-suggestions {
+            display: grid;
+            gap: 5px;
+        }
+        
+        .q-suggestion {
+            padding: 8px 9px;
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, .025);
+            color: #92aaa7;
+            font-size: 8px;
+            line-height: 1.5;
+        }
+        /* =========================================================
+   BUTTON
+========================================================= */
+        
+        .start {
+            width: 100%;
+            margin-top: 17px;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            color: white;
+            background: linear-gradient( 135deg, var(--primary), var(--blue));
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .25s ease;
+            box-shadow: 0 8px 25px rgba(20, 184, 166, .12);
+        }
+        
+        .start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(20, 184, 166, .25);
+        }
+        
+        .start:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .note {
+            text-align: center;
+            color: #54736f;
+            font-size: 8px;
+            margin-top: 8px;
+        }
+        /* =========================================================
+   PROCESSING
+========================================================= */
+        
+        .processing {
+            display: none;
+            margin-top: 15px;
+            padding: 17px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .025);
+            border: 1px solid rgba(94, 234, 212, .08);
+            text-align: center;
+        }
+        
+        .processing.show {
+            display: block;
+        }
+        
+        .spinner {
+            width: 29px;
+            height: 29px;
+            margin: 0 auto 10px;
+            border: 3px solid rgba(94, 234, 212, .12);
+            border-top-color: var(--primary2);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .processing h3 {
+            font-size: 11px;
+        }
+        
+        .processing p {
+            color: var(--muted);
+            font-size: 8px;
+            margin-top: 4px;
+        }
+        /* =========================================================
+   RESULT
+========================================================= */
+        
+        .result {
+            display: none;
+            margin-top: 17px;
+            padding: 17px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(20, 184, 166, .035);
+            animation: fadeIn .4s ease;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-head {
+            padding: 13px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, .025);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 11px;
+        }
+        
+        .result-head.success {
+            border-left-color: var(--success);
+        }
+        
+        .result-head.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .result-head.danger {
+            border-left-color: var(--danger);
+        }
+        
+        .result-head h3 {
+            font-size: 16px;
+        }
+        
+        .result-status {
+            font-size: 10px;
+            font-weight: 800;
+            margin-top: 4px;
+            color: var(--primary2);
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
+        }
+        
+        .result-box {
+            padding: 11px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .025);
+            border: 1px solid rgba(94, 234, 212, .06);
+        }
+        
+        .result-box span {
+            display: block;
+            color: #63827e;
+            font-size: 8px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .result-box strong {
+            font-size: 12px;
+        }
+        
+        .extracted {
+            margin-top: 13px;
+        }
+        
+        .extracted h4 {
+            font-size: 10px;
+            margin-bottom: 7px;
+        }
+        
+        .fields {
+            display: grid;
+            gap: 6px;
+        }
+        
+        .field {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, .025);
+        }
+        
+        .field span {
+            color: #718d89;
+            font-size: 8px;
+        }
+        
+        .field strong {
+            font-size: 9px;
+            text-align: right;
+            word-break: break-word;
+        }
+        /* =========================================================
+   RIGHT INFO
+========================================================= */
+        
+        .checks {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px;
+            background: rgba(255, 255, 255, .025);
+            border: 1px solid rgba(94, 234, 212, .07);
+            border-radius: 8px;
+        }
+        
+        .check-icon {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            color: var(--primary2);
+            background: rgba(20, 184, 166, .07);
+        }
+        
+        .check strong {
+            display: block;
+            font-size: 10px;
+        }
+        
+        .check span {
+            display: block;
+            color: #62827e;
+            margin-top: 3px;
+            font-size: 8px;
+        }
+        
+        .notice {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 9px;
+            background: rgba(37, 99, 235, .06);
+            border: 1px solid rgba(37, 99, 235, .1);
+        }
+        
+        .notice strong {
+            display: block;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .notice p {
+            color: #718b88;
+            font-size: 8px;
+            line-height: 1.6;
+        }
+        /* =========================================================
+   RESPONSIVE
+========================================================= */
+        
+        @media(max-width:1000px) {
+            .nav {
+                display: none;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media(max-width:700px) {
+            .navbar {
+                left: 10px;
+                right: 10px;
+            }
+            .brand-text {
+                display: none;
+            }
+            .main {
+                width: 94%;
+                padding-top: 100px;
+            }
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+            .file-grid {
+                grid-template-columns: 1fr;
+            }
+            .step-line {
+                width: 30px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+
+
+    <header class="navbar">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                VS
+            </div>
+
+            <div class="brand-text">
+
+                <h2>
+                    VeriShield
+                </h2>
+
+                <p>
+                    SIH26188 • Identity Intelligence
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a href="index.html">
+            Dashboard
+        </a>
+
+            <a href="verification.html" class="active">
+            Verification
+        </a>
+
+            <a href="history.html">
+            History
+        </a>
+
+            <a href="reports.html">
+            Reports
+        </a>
+
+        </nav>
+
+
+        <div class="online">
+
+            <span class="online-dot"></span> Backend Ready
+
+        </div>
+
+    </header>
+
+
+    <main class="main">
+
+
+        <div class="topbar">
+
+            <div>
+
+                <div class="eyebrow">
+                    SMART INDIA HACKATHON 2026 • SIH26188
+                </div>
+
+                <h1 class="page-title">
+                    Document Verification
+                </h1>
+
+                <p class="subtitle">
+                    Upload → improve image quality → verify → review result
+                </p>
+
+            </div>
+
+
+            <a href="index.html" class="back">
+            ← Dashboard
+        </a>
+
+        </div>
+
+
+        <!-- =====================================================
+         STEPS
+    ====================================================== -->
+
+        <div class="steps">
+
+
+            <div class="step active">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <span>
+                Upload
+            </span>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <span>
+                Verify
+            </span>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <span>
+                Result
+            </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+
+            <!-- =================================================
+             LEFT
+        ================================================== -->
+
+            <section class="card">
+
+
+                <h2>
+                    Upload Document
+                </h2>
+
+
+                <p class="card-description">
+                    Select the correct document type and upload a clear image. The system will check image quality before running verification.
+                </p>
+
+
+                <label class="field-label" for="documentType">
+                Document Type
+            </label>
+
+
+                <select id="documentType" class="select">
+
+                <option value="pan_card">
+                    PAN Card
+                </option>
+
+                <option value="national_id">
+                    National ID
+                </option>
+
+                <option value="passport">
+                    Passport
+                </option>
+
+                <option value="driving_license">
+                    Driving License
+                </option>
+
+                <option value="visa">
+                    Visa
+                </option>
+
+                <option value="permit">
+                    Permit
+                </option>
+
+            </select>
+
+
+                <!-- UPLOAD -->
+
+                <label class="upload" id="uploadArea" for="fileInput">
+
+                <div class="upload-icon">
+                    📄
+                </div>
+
+
+                <h3>
+                    Drag & Drop your document
+                </h3>
+
+
+                <p>
+                    JPG, PNG or WEBP • maximum 10 MB
+                </p>
+
+
+                <span class="choose">
+                    Choose Document
+                </span>
+
+            </label>
+
+
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp">
+
+
+                <!-- PREVIEW -->
+
+                <div class="preview" id="previewContainer">
+
+
+                    <div class="preview-head">
+
+                        <span>
+                        Document Preview
+                    </span>
+
+
+                        <button type="button" class="remove" id="removeButton">
+                        Remove
+                    </button>
+
+                    </div>
+
+
+                    <img id="previewImage" alt="Document Preview">
+
+
+                    <div class="file-grid">
+
+
+                        <div class="file-info">
+
+                            <span>
+                            File Name
+                        </span>
+
+                            <strong id="fileName">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="file-info">
+
+                            <span>
+                            File Size
+                        </span>
+
+                            <strong id="fileSize">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="file-info">
+
+                            <span>
+                            File Type
+                        </span>
+
+                            <strong id="fileType">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="file-info">
+
+                            <span>
+                            Status
+                        </span>
+
+                            <strong id="fileStatus">
+                            Ready
+                        </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                 QUALITY
+            ================================================== -->
+
+                <div class="quality" id="qualityPanel">
+
+
+                    <div class="quality-head">
+
+                        <div>
+
+                            <h3>
+                                Document Quality Assistant
+                            </h3>
+
+                            <p>
+                                Suggestions to improve image suitability.
+                            </p>
+
+                        </div>
+
+
+                        <div class="q-score" id="qualityScore">
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="q-level" id="qualityLevel">
+                        CHECKING
+                    </div>
+
+
+                    <div class="q-checks" id="qualityChecks">
+                    </div>
+
+
+                    <div>
+
+                        <div class="q-title">
+                            Suggestions
+                        </div>
+
+
+                        <div class="q-suggestions" id="qualitySuggestions">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- START -->
+
+                <button type="button" class="start" id="startButton" disabled>
+                Start Verification
+            </button>
+
+
+                <div class="note">
+
+                    🔒 Prototype — use fictional or authorized sample documents.
+
+                </div>
+
+
+                <!-- PROCESSING -->
+
+                <div class="processing" id="processing">
+
+                    <div class="spinner"></div>
+
+                    <h3>
+                        Processing Document
+                    </h3>
+
+                    <p id="processingText">
+                        Connecting to verification server...
+                    </p>
+
+                </div>
+
+
+                <!-- RESULT -->
+
+                <div class="result" id="resultContainer">
+
+
+                    <div class="result-head" id="resultHeader">
+
+                        <h3>
+                            Verification Result
+                        </h3>
+
+
+                        <div class="result-status" id="resultStatus">
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-stats">
+
+
+                        <div class="result-box">
+
+                            <span>
+                            Risk Score
+                        </span>
+
+                            <strong id="riskScore">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="result-box">
+
+                            <span>
+                            Risk Level
+                        </span>
+
+                            <strong id="riskLevel">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="result-box">
+
+                            <span>
+                            Validation
+                        </span>
+
+                            <strong id="validationScore">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="result-box">
+
+                            <span>
+                            OCR Confidence
+                        </span>
+
+                            <strong id="ocrConfidence">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="result-box">
+
+                            <span>
+                            Blacklist
+                        </span>
+
+                            <strong id="blacklistStatus">
+                            -
+                        </strong>
+
+                        </div>
+
+
+                        <div class="result-box">
+
+                            <span>
+                            Tampering
+                        </span>
+
+                            <strong id="tamperingScore">
+                            -
+                        </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="extracted">
+
+                        <h4>
+                            Extracted Information
+                        </h4>
+
+
+                        <div class="fields" id="fieldList">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+            <section class="card">
+
+
+                <h2>
+                    Verification Pipeline
+                </h2>
+
+
+                <p class="card-description">
+                    Multiple checks are combined before producing the prototype screening result.
+                </p>
+
+
+                <div class="checks">
+
+
+                    <div class="check">
+
+                        <div class="check-icon">
+                            01
+                        </div>
+
+                        <div>
+
+                            <strong>
+                            OCR Extraction
+                        </strong>
+
+                            <span>
+                            Read text from the uploaded image
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <div class="check-icon">
+                            02
+                        </div>
+
+                        <div>
+
+                            <strong>
+                            Field Extraction
+                        </strong>
+
+                            <span>
+                            Identify document-specific information
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <div class="check-icon">
+                            03
+                        </div>
+
+                        <div>
+
+                            <strong>
+                            Document Validation
+                        </strong>
+
+                            <span>
+                            Check required fields and formats
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <div class="check-icon">
+                            04
+                        </div>
+
+                        <div>
+
+                            <strong>
+                            Blacklist Check
+                        </strong>
+
+                            <span>
+                            Compare against configured prototype values
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <div class="check-icon">
+                            05
+                        </div>
+
+                        <div>
+
+                            <strong>
+                            Image Analysis
+                        </strong>
+
+                            <span>
+                            Analyze image quality indicators
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <div class="check-icon">
+                            06
+                        </div>
+
+                        <div>
+
+                            <strong>
+                            Risk Assessment
+                        </strong>
+
+                            <span>
+                            Calculate overall screening risk
+                        </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="notice">
+
+                    <strong>
+                    Prototype Notice
+                </strong>
+
+                    <p>
+                        The quality assistant provides image-improvement guidance. It does not determine whether a document is genuine. Verification results are decision-support outputs from the configured prototype checks.
+                    </p>
+
+                </div>
+
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        /* ==========================================================
+           BACKEND
+        ========================================================== */
+
+        var API_URL =
+            "http://127.0.0.1:8000";
+
+        var REQUEST_TIMEOUT = 120000;
+
+
+        /* ==========================================================
+           ELEMENTS
+        ========================================================== */
+
+        var fileInput =
+            document.getElementById(
+                "fileInput"
+            );
+
+        var uploadArea =
+            document.getElementById(
+                "uploadArea"
+            );
+
+        var previewContainer =
+            document.getElementById(
+                "previewContainer"
+            );
+
+        var previewImage =
+            document.getElementById(
+                "previewImage"
+            );
+
+        var fileName =
+            document.getElementById(
+                "fileName"
+            );
+
+        var fileSize =
+            document.getElementById(
+                "fileSize"
+            );
+
+        var fileType =
+            document.getElementById(
+                "fileType"
+            );
+
+        var fileStatus =
+            document.getElementById(
+                "fileStatus"
+            );
+
+        var removeButton =
+            document.getElementById(
+                "removeButton"
+            );
+
+        var startButton =
+            document.getElementById(
+                "startButton"
+            );
+
+        var processing =
+            document.getElementById(
+                "processing"
+            );
+
+        var processingText =
+            document.getElementById(
+                "processingText"
+            );
+
+        var documentType =
+            document.getElementById(
+                "documentType"
+            );
+
+        var resultContainer =
+            document.getElementById(
+                "resultContainer"
+            );
+
+        var resultHeader =
+            document.getElementById(
+                "resultHeader"
+            );
+
+        var resultStatus =
+            document.getElementById(
+                "resultStatus"
+            );
+
+        var riskScore =
+            document.getElementById(
+                "riskScore"
+            );
+
+        var riskLevel =
+            document.getElementById(
+                "riskLevel"
+            );
+
+        var validationScore =
+            document.getElementById(
+                "validationScore"
+            );
+
+        var ocrConfidence =
+            document.getElementById(
+                "ocrConfidence"
+            );
+
+        var blacklistStatus =
+            document.getElementById(
+                "blacklistStatus"
+            );
+
+        var tamperingScore =
+            document.getElementById(
+                "tamperingScore"
+            );
+
+        var fieldList =
+            document.getElementById(
+                "fieldList"
+            );
+
+
+        /* ==========================================================
+           QUALITY ELEMENTS
+        ========================================================== */
+
+        var qualityPanel =
+            document.getElementById(
+                "qualityPanel"
+            );
+
+        var qualityScore =
+            document.getElementById(
+                "qualityScore"
+            );
+
+        var qualityLevel =
+            document.getElementById(
+                "qualityLevel"
+            );
+
+        var qualityChecks =
+            document.getElementById(
+                "qualityChecks"
+            );
+
+        var qualitySuggestions =
+            document.getElementById(
+                "qualitySuggestions"
+            );
+
+
+        /* ==========================================================
+           FILE SIZE
+        ========================================================== */
+
+        function formatFileSize(bytes) {
+
+            if (
+                bytes === 0
+            ) {
+
+                return "0 Bytes";
+            }
+
+
+            var sizes = [
+                "Bytes",
+                "KB",
+                "MB",
+                "GB"
+            ];
+
+
+            var index =
+                Math.floor(
+                    Math.log(bytes) /
+                    Math.log(1024)
+                );
+
+
+            return (
+                    Math.round(
+                        (
+                            bytes /
+                            Math.pow(
+                                1024,
+                                index
+                            )
+                        ) * 100
+                    ) / 100
+                ) +
+                " " +
+                sizes[index];
+        }
+
+
+        /* ==========================================================
+           IMAGE QUALITY
+           Browser-side only
+        ========================================================== */
+
+        function analyzeImageQuality(
+            file
+        ) {
+
+            qualityPanel.classList.add(
+                "show"
+            );
+
+            qualityScore.textContent =
+                "...";
+
+            qualityLevel.textContent =
+                "ANALYZING";
+
+            qualityChecks.innerHTML =
+                "";
+
+            qualitySuggestions.innerHTML =
+                "";
+
+
+            var score = 100;
+
+            var suggestions = [];
+
+            var checks = [];
+
+
+            /* -----------------------------------------
+               File size
+            ----------------------------------------- */
+
+            if (
+                file.size < 50000
+            ) {
+
+                score -= 15;
+
+                checks.push({
+                    name: "File Size",
+                    status: "WARNING"
+                });
+
+                suggestions.push(
+                    "Use a higher-quality image if the document text looks unclear."
+                );
+
+            } else {
+
+                checks.push({
+                    name: "File Size",
+                    status: "PASS"
+                });
+
+            }
+
+
+            /* -----------------------------------------
+               Read dimensions
+            ----------------------------------------- */
+
+            var image =
+                new Image();
+
+
+            image.onload =
+                function() {
+
+                    var width =
+                        image.naturalWidth;
+
+                    var height =
+                        image.naturalHeight;
+
+
+                    if (
+                        width < 600 ||
+                        height < 400
+                    ) {
+
+                        score -= 25;
+
+                        checks.push({
+                            name: "Resolution",
+                            status: "FAIL"
+                        });
+
+                        suggestions.push(
+                            "Use a higher-resolution image."
+                        );
+
+                    } else {
+
+                        checks.push({
+                            name: "Resolution",
+                            status: "PASS"
+                        });
+
+                    }
+
+
+                    if (
+                        width > 0 &&
+                        height > 0
+                    ) {
+
+                        var ratio =
+                            width /
+                            height;
+
+
+                        if (
+                            ratio < .5 ||
+                            ratio > 2.5
+                        ) {
+
+                            score -= 10;
+
+                            checks.push({
+                                name: "Framing",
+                                status: "WARNING"
+                            });
+
+                            suggestions.push(
+                                "Keep the complete document inside the image and avoid excessive cropping."
+                            );
+
+                        } else {
+
+                            checks.push({
+                                name: "Framing",
+                                status: "PASS"
+                            });
+
+                        }
+
+                    }
+
+
+                    score =
+                        Math.max(
+                            0,
+                            Math.min(
+                                100,
+                                score
+                            )
+                        );
+
+
+                    qualityScore.textContent =
+                        score + "/100";
+
+
+                    if (
+                        score >= 80
+                    ) {
+
+                        qualityLevel.textContent =
+                            "GOOD";
+
+                        qualityLevel.style.color =
+                            "#166534";
+
+                        qualityLevel.style.background =
+                            "#dcfce7";
+
+                    } else if (
+                        score >= 60
+                    ) {
+
+                        qualityLevel.textContent =
+                            "FAIR";
+
+                        qualityLevel.style.color =
+                            "#92400e";
+
+                        qualityLevel.style.background =
+                            "#fef3c7";
+
+                    } else {
+
+                        qualityLevel.textContent =
+                            "POOR";
+
+                        qualityLevel.style.color =
+                            "#991b1b";
+
+                        qualityLevel.style.background =
+                            "#fee2e2";
+                    }
+
+
+                    /* -----------------------------------------
+                       Render checks
+                    ----------------------------------------- */
+
+                    qualityChecks.innerHTML =
+                        "";
+
+
+                    checks.forEach(
+                        function(check) {
+
+                            var row =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            row.className =
+                                "q-check";
+
+
+                            var name =
+                                document.createElement(
+                                    "span"
+                                );
+
+                            name.textContent =
+                                check.name;
+
+
+                            var status =
+                                document.createElement(
+                                    "strong"
+                                );
+
+                            status.className =
+                                "q-status";
+
+                            status.textContent =
+                                check.status;
+
+
+                            if (
+                                check.status ===
+                                "PASS"
+                            ) {
+
+                                status.style.color =
+                                    "#16a34a";
+
+                            } else if (
+                                check.status ===
+                                "WARNING"
+                            ) {
+
+                                status.style.color =
+                                    "#d97706";
+
+                            } else {
+
+                                status.style.color =
+                                    "#dc2626";
+                            }
+
+
+                            row.appendChild(
+                                name
+                            );
+
+                            row.appendChild(
+                                status
+                            );
+
+
+                            qualityChecks.appendChild(
+                                row
+                            );
+
+                        }
+                    );
+
+
+                    /* -----------------------------------------
+                       Suggestions
+                    ----------------------------------------- */
+
+                    if (
+                        suggestions.length ===
+                        0
+                    ) {
+
+                        suggestions.push(
+                            "Image quality looks suitable for document screening."
+                        );
+                    }
+
+
+                    qualitySuggestions.innerHTML =
+                        "";
+
+
+                    suggestions.forEach(
+                        function(text) {
+
+                            var item =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            item.className =
+                                "q-suggestion";
+
+
+                            item.textContent =
+                                "• " +
+                                text;
+
+
+                            qualitySuggestions.appendChild(
+                                item
+                            );
+
+                        }
+                    );
+
+                };
+
+
+            image.onerror =
+                function() {
+
+                    qualityScore.textContent =
+                        "-";
+
+                    qualityLevel.textContent =
+                        "UNAVAILABLE";
+
+                    qualitySuggestions.innerHTML =
+                        `
+                <div class="q-suggestion">
+                    • The selected image could not be analyzed.
+                </div>
+                `;
+                };
+
+
+            image.src =
+                URL.createObjectURL(
+                    file
+                );
+        }
+
+
+        /* ==========================================================
+           FILE HANDLER
+        ========================================================== */
+
+        function handleFile(
+            file
+        ) {
+
+            var allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+
+            if (
+                allowedTypes.indexOf(
+                    file.type
+                ) === -1
+            ) {
+
+                alert(
+                    "Please select JPG, PNG or WEBP."
+                );
+
+                fileInput.value =
+                    "";
+
+                return;
+            }
+
+
+            if (
+                file.size >
+                10 * 1024 * 1024
+            ) {
+
+                alert(
+                    "File size must be 10 MB or smaller."
+                );
+
+                fileInput.value =
+                    "";
+
+                return;
+            }
+
+
+            var reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    previewImage.src =
+                        event.target.result;
+
+                    previewContainer
+                        .classList
+                        .add(
+                            "show"
+                        );
+
+                    uploadArea.style.display =
+                        "none";
+
+                    startButton.disabled =
+                        false;
+
+                    fileStatus.textContent =
+                        "Ready";
+
+                    analyzeImageQuality(
+                        file
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+
+            fileName.textContent =
+                file.name;
+
+
+            fileSize.textContent =
+                formatFileSize(
+                    file.size
+                );
+
+
+            fileType.textContent =
+                file.type;
+        }
+
+
+        /* ==========================================================
+           FILE SELECT
+        ========================================================== */
+
+        fileInput.addEventListener(
+            "change",
+            function() {
+
+                if (
+                    fileInput.files &&
+                    fileInput.files.length > 0
+                ) {
+
+                    handleFile(
+                        fileInput.files[0]
+                    );
+                }
+
+            }
+        );
+
+
+        /* ==========================================================
+           REMOVE
+        ========================================================== */
+
+        removeButton.addEventListener(
+            "click",
+            function() {
+
+                fileInput.value =
+                    "";
+
+                previewImage.src =
+                    "";
+
+                previewContainer
+                    .classList
+                    .remove(
+                        "show"
+                    );
+
+                uploadArea.style.display =
+                    "flex";
+
+                startButton.disabled =
+                    true;
+
+                resultContainer
+                    .classList
+                    .remove(
+                        "show"
+                    );
+
+                processing
+                    .classList
+                    .remove(
+                        "show"
+                    );
+
+                fileStatus.textContent =
+                    "Ready";
+
+
+                qualityPanel
+                    .classList
+                    .remove(
+                        "show"
+                    );
+
+            }
+        );
+
+
+        /* ==========================================================
+           DRAG AND DROP
+        ========================================================== */
+
+        uploadArea.addEventListener(
+            "dragover",
+            function(event) {
+
+                event.preventDefault();
+
+                uploadArea.classList.add(
+                    "drag"
+                );
+            }
+        );
+
+
+        uploadArea.addEventListener(
+            "dragleave",
+            function() {
+
+                uploadArea.classList.remove(
+                    "drag"
+                );
+            }
+        );
+
+
+        uploadArea.addEventListener(
+            "drop",
+            function(event) {
+
+                event.preventDefault();
+
+                uploadArea.classList.remove(
+                    "drag"
+                );
+
+
+                var files =
+                    event.dataTransfer.files;
+
+
+                if (!files ||
+                    files.length === 0
+                ) {
+
+                    return;
+                }
+
+
+                var file =
+                    files[0];
+
+
+                try {
+
+                    var transfer =
+                        new DataTransfer();
+
+                    transfer.items.add(
+                        file
+                    );
+
+                    fileInput.files =
+                        transfer.files;
+
+                } catch (error) {
+
+                    console.log(
+                        "Browser DataTransfer unavailable."
+                    );
+                }
+
+
+                handleFile(
+                    file
+                );
+
+            }
+        );
+
+
+        /* ==========================================================
+           FIELD FORMAT
+        ========================================================== */
+
+        function formatFieldName(
+            name
+        ) {
+
+            return String(name)
+                .replace(
+                    /_/g,
+                    " "
+                )
+                .replace(
+                    /\b\w/g,
+                    function(letter) {
+                        return letter.toUpperCase();
+                    }
+                );
+        }
+
+
+        /* ==========================================================
+           DISPLAY FIELDS
+        ========================================================== */
+
+        function displayFields(
+            fields
+        ) {
+
+            fieldList.innerHTML =
+                "";
+
+
+            var keys =
+                Object.keys(
+                    fields || {}
+                );
+
+
+            if (
+                keys.length === 0
+            ) {
+
+                fieldList.innerHTML =
+                    `
+            <div class="field">
+
+                <span>
+                    No fields detected
+                </span>
+
+                <strong>
+                    -
+                </strong>
+
+            </div>
+            `;
+
+                return;
+            }
+
+
+            keys.forEach(
+                function(key) {
+
+                    var row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "field";
+
+
+                    var label =
+                        document.createElement(
+                            "span"
+                        );
+
+                    label.textContent =
+                        formatFieldName(
+                            key
+                        );
+
+
+                    var value =
+                        document.createElement(
+                            "strong"
+                        );
+
+                    value.textContent =
+                        fields[key] ||
+                        "Not detected";
+
+
+                    row.appendChild(
+                        label
+                    );
+
+                    row.appendChild(
+                        value
+                    );
+
+                    fieldList.appendChild(
+                        row
+                    );
+
+                }
+            );
+        }
+
+
+        /* ==========================================================
+           RESULT STYLE
+        ========================================================== */
+
+        function setResultStyle(
+            status
+        ) {
+
+            resultHeader.className =
+                "result-head";
+
+
+            if (
+                status ===
+                "VERIFIED"
+            ) {
+
+                resultHeader.classList.add(
+                    "success"
+                );
+
+            } else if (
+                status ===
+                "REVIEW_REQUIRED"
+            ) {
+
+                resultHeader.classList.add(
+                    "warning"
+                );
+
+            } else {
+
+                resultHeader.classList.add(
+                    "danger"
+                );
+            }
+        }
+
+
+        /* ==========================================================
+           SHOW RESULT
+        ========================================================== */
+
+        function showResult(
+            data
+        ) {
+
+            var risk =
+                data.risk || {};
+
+            var validation =
+                data.validation || {};
+
+            var blacklist =
+                data.blacklist || {};
+
+            var imageAnalysis =
+                data.image_analysis || {};
+
+            var ocr =
+                data.ocr || {};
+
+
+            resultStatus.textContent =
+                String(
+                    risk.status ||
+                    "COMPLETED"
+                ).replace(
+                    /_/g,
+                    " "
+                );
+
+
+            riskScore.textContent =
+                risk.risk_score !== undefined ?
+                risk.risk_score :
+                "-";
+
+
+            riskLevel.textContent =
+                risk.risk_level ||
+                "-";
+
+
+            validationScore.textContent =
+                validation.score !== undefined ?
+                validation.score + "%" :
+                "-";
+
+
+            ocrConfidence.textContent =
+                ocr.average_confidence !== undefined ?
+                (
+                    Number(
+                        ocr.average_confidence
+                    ) * 100
+                ).toFixed(2) + "%" :
+                "-";
+
+
+            blacklistStatus.textContent =
+                blacklist.blacklisted ?
+                "MATCH FOUND" :
+                "No Match";
+
+
+            tamperingScore.textContent =
+                imageAnalysis.tampering_suspicion !== undefined ?
+                imageAnalysis.tampering_suspicion + "%" :
+                "-";
+
+
+            displayFields(
+                data.extracted_fields || {}
+            );
+
+
+            setResultStyle(
+                risk.status
+            );
+
+
+            resultContainer
+                .classList
+                .add(
+                    "show"
+                );
+
+
+            localStorage.setItem(
+                "verificationResult",
+                JSON.stringify(
+                    data
+                )
+            );
+
+
+            setTimeout(
+                function() {
+
+                    resultContainer.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                },
+                100
+            );
+        }
+
+
+        /* ==========================================================
+           START VERIFICATION
+        ========================================================== */
+
+        startButton.addEventListener(
+            "click",
+            async function() {
+
+                if (!fileInput.files ||
+                    fileInput.files.length === 0
+                ) {
+
+                    alert(
+                        "Please choose a document first."
+                    );
+
+                    return;
+                }
+
+
+                var file =
+                    fileInput.files[0];
+
+
+                var selectedType =
+                    documentType.value;
+
+
+                startButton.disabled =
+                    true;
+
+
+                processing
+                    .classList
+                    .add(
+                        "show"
+                    );
+
+
+                resultContainer
+                    .classList
+                    .remove(
+                        "show"
+                    );
+
+
+                fileStatus.textContent =
+                    "Processing";
+
+
+                processingText.textContent =
+                    "Connecting to verification server...";
+
+
+                try {
+
+
+                    /* ================================================
+                       FORM DATA
+                    ================================================= */
+
+                    var formData =
+                        new FormData();
+
+
+                    formData.append(
+                        "document_type",
+                        selectedType
+                    );
+
+
+                    formData.append(
+                        "file",
+                        file
+                    );
+
+
+                    /* ================================================
+                       API REQUEST
+                    ================================================= */
+
+                    processingText.textContent =
+                        "Running OCR and document verification...";
+
+
+                    var response =
+                        await fetch(
+                            API_URL +
+                            "/api/verify", {
+                                method: "POST",
+
+                                body: formData
+                            }
+                        );
+
+
+                    /* ================================================
+                       READ RESPONSE
+                    ================================================= */
+
+                    var responseText =
+                        await response.text();
+
+
+                    var data;
+
+
+                    try {
+
+                        data =
+                            JSON.parse(
+                                responseText
+                            );
+
+                    } catch (parseError) {
+
+                        throw new Error(
+                            "Backend returned an invalid response."
+                        );
+                    }
+
+
+                    /* ================================================
+                       SERVER ERROR
+                    ================================================= */
+
+                    if (!response.ok) {
+
+                        var message =
+                            "HTTP " +
+                            response.status;
+
+
+                        if (
+                            typeof data.detail ===
+                            "string"
+                        ) {
+
+                            message =
+                                data.detail;
+
+                        } else if (
+                            data.detail &&
+                            data.detail.message
+                        ) {
+
+                            message =
+                                data.detail.message;
+
+                        } else if (
+                            data.message
+                        ) {
+
+                            message =
+                                data.message;
+                        }
+
+
+                        throw new Error(
+                            message
+                        );
+                    }
+
+
+                    /* ================================================
+                       APPLICATION ERROR
+                    ================================================= */
+
+                    if (
+                        data.success !== true
+                    ) {
+
+                        throw new Error(
+                            data.error ||
+                            data.message ||
+                            "Verification failed."
+                        );
+                    }
+
+
+                    /* ================================================
+                       DISPLAY
+                    ================================================= */
+
+                    showResult(
+                        data
+                    );
+
+
+                    fileStatus.textContent =
+                        "Complete";
+
+
+                    processingText.textContent =
+                        "Verification completed.";
+
+                } catch (error) {
+
+                    console.error(
+                        "VERISHIELD ERROR:",
+                        error
+                    );
+
+
+                    fileStatus.textContent =
+                        "Error";
+
+
+                    resultContainer
+                        .classList
+                        .add(
+                            "show"
+                        );
+
+
+                    resultHeader.className =
+                        "result-head danger";
+
+
+                    resultStatus.textContent =
+                        "VERIFICATION ERROR";
+
+
+                    riskScore.textContent =
+                        "-";
+
+                    riskLevel.textContent =
+                        "-";
+
+                    validationScore.textContent =
+                        "-";
+
+                    ocrConfidence.textContent =
+                        "-";
+
+                    blacklistStatus.textContent =
+                        "-";
+
+                    tamperingScore.textContent =
+                        "-";
+
+
+                    displayFields({
+                        error: error.message
+                    });
+
+
+                    processingText.textContent =
+                        "Verification failed.";
+
+
+                    alert(
+                        "Verification failed:\n\n" +
+                        error.message
+                    );
+
+                } finally {
+
+                    processing
+                        .classList
+                        .remove(
+                            "show"
+                        );
+
+
+                    startButton.disabled =
+                        false;
+                }
+
+            }
+        );
+
+
+        /* ==========================================================
+           CONSOLE
+        ========================================================== */
+
+        console.log(
+            "VeriShield verification page loaded."
+        );
+
+        console.log(
+            "Backend API:",
+            API_URL
+        );
+    </script>
+
+</body>
+
+</html>

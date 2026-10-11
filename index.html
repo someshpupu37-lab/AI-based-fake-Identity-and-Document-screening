@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>VeriShield | SIH26188 Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg: #06131b;
+            --panel: #081c25;
+            --panel2: #0b232d;
+            --primary: #14b8a6;
+            --primary2: #5eead4;
+            --blue: #2563eb;
+            --text: #e8fffb;
+            --muted: #86a8a4;
+            --success: #34d399;
+            --warning: #fbbf24;
+            --danger: #fb7185;
+            --line: rgba(94, 234, 212, .14);
+        }
+        
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: radial-gradient( circle at 10% 10%, rgba(20, 184, 166, .12), transparent 28%), radial-gradient( circle at 90% 90%, rgba(37, 99, 235, .10), transparent 28%), linear-gradient( 135deg, #030b12, #061821 60%, #031118);
+        }
+        
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* ============================================================
+   NAVBAR
+============================================================ */
+        
+        .navbar {
+            position: fixed;
+            top: 15px;
+            left: 20px;
+            right: 20px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 14px;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: rgba(3, 15, 22, .88);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .25);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: linear-gradient( 135deg, var(--primary2), var(--primary));
+            color: #022c2b;
+            font-size: 13px;
+            font-weight: 900;
+        }
+        
+        .brand-text h2 {
+            font-size: 16px;
+        }
+        
+        .brand-text p {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .nav a {
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: #87a9a5;
+            font-size: 10px;
+        }
+        
+        .nav a:hover,
+        .nav a.active {
+            color: var(--primary2);
+            background: rgba(20, 184, 166, .08);
+        }
+        
+        .online {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 10px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            color: var(--primary2);
+            font-size: 8px;
+        }
+        
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 9px var(--success);
+        }
+        /* ============================================================
+   MAIN
+============================================================ */
+        
+        .main {
+            width: min(1400px, 92%);
+            margin: auto;
+            padding: 105px 0 60px;
+        }
+        /* ============================================================
+   HERO
+============================================================ */
+        
+        .hero {
+            padding: 35px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: linear-gradient( 135deg, rgba(15, 118, 110, .22), rgba(3, 18, 27, .92));
+            box-shadow: 0 18px 55px rgba(0, 0, 0, .2);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            color: var(--primary2);
+            background: rgba(20, 184, 166, .07);
+            border: 1px solid var(--line);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        
+        .hero h1 {
+            margin-top: 15px;
+            font-size: clamp( 34px, 5vw, 56px);
+            line-height: 1.05;
+            background: linear-gradient( 90deg, #effffc, #5eead4, #99f6e4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            max-width: 730px;
+            margin-top: 12px;
+            color: #86a8a4;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+        /* ============================================================
+   STATS
+============================================================ */
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 13px;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            padding: 17px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: rgba(7, 29, 38, .9);
+            transition: .25s ease;
+        }
+        
+        .stat:hover {
+            transform: translateY(-3px);
+            border-color: rgba(94, 234, 212, .3);
+        }
+        
+        .stat-label {
+            color: #63837f;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+        
+        .stat-value {
+            margin-top: 7px;
+            color: #ddfffa;
+            font-size: 27px;
+            font-weight: 800;
+        }
+        /* ============================================================
+   SECTION
+============================================================ */
+        
+        .section {
+            margin-top: 25px;
+        }
+        
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .section-head h2 {
+            font-size: 18px;
+        }
+        
+        .section-head p {
+            color: var(--muted);
+            font-size: 9px;
+            margin-top: 4px;
+        }
+        /* ============================================================
+   WORKSPACE
+============================================================ */
+        
+        .workspace {
+            display: grid;
+            grid-template-columns: 1.25fr .75fr;
+            gap: 15px;
+        }
+        
+        .card {
+            padding: 21px;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: rgba(7, 29, 38, .88);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+        }
+        
+        .card h3 {
+            font-size: 14px;
+        }
+        
+        .card-desc {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 9px;
+            line-height: 1.5;
+        }
+        /* ============================================================
+   SELECT + UPLOAD
+============================================================ */
+        
+        .form-label {
+            display: block;
+            margin-top: 17px;
+            margin-bottom: 6px;
+            color: #8eaeaa;
+            font-size: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        
+        .select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #061821;
+            color: var(--text);
+            outline: none;
+            font-size: 10px;
+        }
+        
+        .select:focus {
+            border-color: var(--primary);
+        }
+        
+        .upload-area {
+            margin-top: 12px;
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px dashed rgba(94, 234, 212, .3);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary2);
+            background: rgba(20, 184, 166, .04);
+        }
+        
+        .upload-area.drag {
+            border-color: var(--primary2);
+            background: rgba(20, 184, 166, .09);
+        }
+        
+        .upload-icon {
+            font-size: 35px;
+            margin-bottom: 8px;
+        }
+        
+        .upload-area h4 {
+            font-size: 12px;
+        }
+        
+        .upload-area p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 8px;
+        }
+        
+        .choose {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 9px 15px;
+            border-radius: 8px;
+            background: linear-gradient( 135deg, var(--primary), var(--blue));
+            color: white;
+            font-size: 9px;
+            font-weight: 800;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        /* ============================================================
+   FILE INFO
+============================================================ */
+        
+        .file-info {
+            display: none;
+            margin-top: 11px;
+            padding: 11px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, .025);
+            border: 1px solid rgba(94, 234, 212, .08);
+            font-size: 9px;
+        }
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .file-name {
+            color: var(--primary2);
+            font-weight: 800;
+            word-break: break-word;
+        }
+        
+        .file-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 8px;
+        }
+        /* ============================================================
+   VERIFY BUTTON
+============================================================ */
+        
+        .verify-button {
+            width: 100%;
+            margin-top: 11px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient( 135deg, var(--primary), var(--blue));
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+        
+        .verify-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(20, 184, 166, .2);
+        }
+        
+        .verify-button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        /* ============================================================
+   PROCESSING
+============================================================ */
+        
+        .processing {
+            display: none;
+            margin-top: 13px;
+            padding: 17px;
+            border-radius: 10px;
+            background: rgba(20, 184, 166, .05);
+            border: 1px solid rgba(94, 234, 212, .1);
+            text-align: center;
+        }
+        
+        .processing.show {
+            display: block;
+        }
+        
+        .spinner {
+            width: 27px;
+            height: 27px;
+            margin: 0 auto 9px;
+            border: 3px solid rgba(94, 234, 212, .12);
+            border-top-color: var(--primary2);
+            border-radius: 50%;
+            animation: spin .75s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .processing strong {
+            display: block;
+            color: var(--primary2);
+            font-size: 10px;
+        }
+        
+        .processing span {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 8px;
+        }
+        /* ============================================================
+   RESULT
+============================================================ */
+        
+        .result {
+            display: none;
+            margin-top: 14px;
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, .02);
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 9px;
+        }
+        
+        .result-title.success {
+            color: var(--success);
+        }
+        
+        .result-title.warning {
+            color: var(--warning);
+        }
+        
+        .result-title.danger {
+            color: var(--danger);
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+        }
+        
+        .result-box {
+            padding: 9px;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, .025);
+        }
+        
+        .result-box span {
+            display: block;
+            color: #5f817d;
+            font-size: 7px;
+            text-transform: uppercase;
+        }
+        
+        .result-box strong {
+            display: block;
+            margin-top: 3px;
+            color: #d9fff8;
+            font-size: 11px;
+        }
+        
+        .extracted {
+            margin-top: 12px;
+        }
+        
+        .extracted h4 {
+            font-size: 10px;
+            margin-bottom: 6px;
+        }
+        
+        .field {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, .025);
+            margin-bottom: 5px;
+            font-size: 8px;
+        }
+        
+        .field span {
+            color: #668580;
+        }
+        
+        .field strong {
+            color: #d8fff8;
+            text-align: right;
+            word-break: break-word;
+        }
+        
+        .error-result {
+            color: var(--danger);
+            font-size: 9px;
+            line-height: 1.6;
+        }
+        /* ============================================================
+   SYSTEM CARD
+============================================================ */
+        
+        .system-list {
+            display: grid;
+            gap: 5px;
+        }
+        
+        .system-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 5px;
+            border-bottom: 1px solid rgba(94, 234, 212, .06);
+        }
+        
+        .system-item:last-child {
+            border-bottom: none;
+        }
+        
+        .system-left {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        
+        .system-icon {
+            width: 31px;
+            height: 31px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: rgba(20, 184, 166, .07);
+            font-size: 12px;
+        }
+        
+        .system-left strong {
+            display: block;
+            font-size: 9px;
+        }
+        
+        .system-left span {
+            display: block;
+            margin-top: 3px;
+            color: #5f817d;
+            font-size: 7px;
+        }
+        
+        .status {
+            padding: 4px 7px;
+            border-radius: 15px;
+            color: var(--success);
+            background: rgba(52, 211, 153, .07);
+            font-size: 7px;
+            font-weight: 800;
+        }
+        
+        .status.offline {
+            color: var(--danger);
+            background: rgba(251, 113, 133, .07);
+        }
+        /* ============================================================
+   HISTORY
+============================================================ */
+        
+        .table-card {
+            padding: 21px;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: rgba(7, 29, 38, .88);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+        }
+        
+        th {
+            padding: 10px;
+            text-align: left;
+            color: #63827e;
+            font-size: 8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(94, 234, 212, .08);
+        }
+        
+        td {
+            padding: 11px 10px;
+            color: #b7d3cf;
+            font-size: 9px;
+            border-bottom: 1px solid rgba(94, 234, 212, .05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 7px;
+            border-radius: 15px;
+            font-size: 7px;
+            font-weight: 800;
+        }
+        
+        .success-badge {
+            color: var(--success);
+            background: rgba(52, 211, 153, .08);
+        }
+        
+        .warning-badge {
+            color: var(--warning);
+            background: rgba(251, 191, 36, .08);
+        }
+        
+        .danger-badge {
+            color: var(--danger);
+            background: rgba(251, 113, 133, .08);
+        }
+        /* ============================================================
+   RESPONSIVE
+============================================================ */
+        
+        @media(max-width:1000px) {
+            .nav {
+                display: none;
+            }
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media(max-width:650px) {
+            .navbar {
+                left: 10px;
+                right: 10px;
+            }
+            .brand-text {
+                display: none;
+            }
+            .main {
+                width: 94%;
+                padding-top: 95px;
+            }
+            .hero {
+                padding: 25px;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .result-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header class="navbar">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                VS
+            </div>
+
+            <div class="brand-text">
+
+                <h2>
+                    VeriShield
+                </h2>
+
+                <p>
+                    SIH26188 • Identity Intelligence
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a href="index.html" class="active">
+            Dashboard
+        </a>
+
+            <a href="verification.html">
+            Verification
+        </a>
+
+            <a href="history.html">
+            History
+        </a>
+
+            <a href="reports.html">
+            Reports
+        </a>
+
+        </nav>
+
+
+        <div class="online">
+
+            <span class="dot"></span>
+
+            <span id="backendText">
+            Checking Backend
+        </span>
+
+        </div>
+
+    </header>
+
+
+    <main class="main">
+
+
+        <!-- ==========================================================
+     HERO
+========================================================== -->
+
+        <section class="hero">
+
+            <div class="tag">
+                SMART INDIA HACKATHON 2026 • SIH26188
+            </div>
+
+            <h1>
+                Verification<br> Command Center
+            </h1>
+
+            <p>
+                AI-assisted identity and document screening using PaddleOCR, document-specific field extraction, validation, blacklist screening, image analysis and risk assessment.
+            </p>
+
+        </section>
+
+
+        <!-- ==========================================================
+     STATISTICS
+========================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Total Verifications
+                </div>
+
+                <div class="stat-value" id="totalCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Verified
+                </div>
+
+                <div class="stat-value" id="verifiedCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Review Required
+                </div>
+
+                <div class="stat-value" id="reviewCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    High Risk
+                </div>
+
+                <div class="stat-value" id="highRiskCount">
+                    0
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==========================================================
+     VERIFICATION WORKSPACE
+========================================================== -->
+
+        <section class="section">
+
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        Quick Verification
+                    </h2>
+
+                    <p>
+                        Run a real verification through the FastAPI backend
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="workspace">
+
+
+                <!-- ==========================================================
+     UPLOAD CARD
+========================================================== -->
+
+                <section class="card">
+
+
+                    <h3>
+                        Upload Document
+                    </h3>
+
+
+                    <p class="card-desc">
+                        Select the correct document type before uploading.
+                    </p>
+
+
+                    <label class="form-label" for="documentType">
+    Document Type
+</label>
+
+
+                    <select id="documentType" class="select">
+
+    <option value="pan_card">
+        PAN Card
+    </option>
+
+    <option value="national_id">
+        National ID
+    </option>
+
+    <option value="passport">
+        Passport
+    </option>
+
+    <option value="driving_license">
+        Driving License
+    </option>
+
+    <option value="visa">
+        Visa
+    </option>
+
+    <option value="permit">
+        Permit
+    </option>
+
+</select>
+
+
+                    <label class="upload-area" id="uploadArea" for="fileInput">
+
+
+    <div class="upload-icon">
+        📄
+    </div>
+
+
+    <h4>
+        Select or drop your document
+    </h4>
+
+
+    <p>
+        JPG, PNG or WEBP • maximum 10 MB
+    </p>
+
+
+    <span class="choose">
+        Choose Document
+    </span>
+
+
+</label>
+
+
+                    <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp">
+
+
+                    <div class="file-info" id="fileInfo">
+
+                        <div class="file-name" id="fileName">
+                            -
+                        </div>
+
+
+                        <div class="file-meta">
+
+                            <span id="fileSize">
+            -
+        </span>
+
+                            <span id="fileType">
+            -
+        </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="button" class="verify-button" id="verifyButton" disabled>
+    Start Verification
+</button>
+
+
+                    <!-- PROCESSING -->
+
+                    <div class="processing" id="processing">
+
+                        <div class="spinner"></div>
+
+                        <strong>
+        Verification in progress
+    </strong>
+
+                        <span id="processingText">
+        Sending document to backend...
+    </span>
+
+                    </div>
+
+
+                    <!-- RESULT -->
+
+                    <div class="result" id="resultBox">
+
+
+                        <div class="result-title" id="resultTitle">
+                            Verification Result
+                        </div>
+
+
+                        <div class="result-grid">
+
+
+                            <div class="result-box">
+
+                                <span>
+                Verification ID
+            </span>
+
+                                <strong id="verificationId">
+                -
+            </strong>
+
+                            </div>
+
+
+                            <div class="result-box">
+
+                                <span>
+                Risk Score
+            </span>
+
+                                <strong id="riskScore">
+                -
+            </strong>
+
+                            </div>
+
+
+                            <div class="result-box">
+
+                                <span>
+                Risk Level
+            </span>
+
+                                <strong id="riskLevel">
+                -
+            </strong>
+
+                            </div>
+
+
+                            <div class="result-box">
+
+                                <span>
+                Validation
+            </span>
+
+                                <strong id="validationScore">
+                -
+            </strong>
+
+                            </div>
+
+
+                            <div class="result-box">
+
+                                <span>
+                OCR Confidence
+            </span>
+
+                                <strong id="ocrConfidence">
+                -
+            </strong>
+
+                            </div>
+
+
+                            <div class="result-box">
+
+                                <span>
+                Blacklist
+            </span>
+
+                                <strong id="blacklistStatus">
+                -
+            </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="extracted">
+
+                            <h4>
+                                Extracted Information
+                            </h4>
+
+
+                            <div id="fieldList">
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- ==========================================================
+     SYSTEM
+========================================================== -->
+
+                <section class="card">
+
+
+                    <h3>
+                        System Status
+                    </h3>
+
+
+                    <p class="card-desc">
+                        Current status of the verification components.
+                    </p>
+
+
+                    <div class="system-list">
+
+
+                        <div class="system-item">
+
+
+                            <div class="system-left">
+
+                                <div class="system-icon">
+                                    ⚡
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                FastAPI Backend
+            </strong>
+
+                                    <span>
+                127.0.0.1:8000
+            </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <span class="status" id="apiStatus">
+        CHECKING
+    </span>
+
+
+                        </div>
+
+
+                        <div class="system-item">
+
+
+                            <div class="system-left">
+
+                                <div class="system-icon">
+                                    🔎
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                PaddleOCR
+            </strong>
+
+                                    <span>
+                Text extraction
+            </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <span class="status">
+        READY
+    </span>
+
+
+                        </div>
+
+
+                        <div class="system-item">
+
+
+                            <div class="system-left">
+
+                                <div class="system-icon">
+                                    🗄
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                SQLite
+            </strong>
+
+                                    <span>
+                Verification history
+            </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <span class="status">
+        CONNECTED
+    </span>
+
+
+                        </div>
+
+
+                        <div class="system-item">
+
+
+                            <div class="system-left">
+
+                                <div class="system-icon">
+                                    🛡
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                Risk Engine
+            </strong>
+
+                                    <span>
+                Screening analysis
+            </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <span class="status">
+        ACTIVE
+    </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================================
+     HISTORY
+========================================================== -->
+
+        <section class="section">
+
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        Recent Verification Activity
+                    </h2>
+
+                    <p>
+                        Latest results stored by the backend
+                    </p>
+
+                </div>
+
+
+                <a href="history.html" class="tag">
+        VIEW HISTORY
+    </a>
+
+            </div>
+
+
+            <section class="table-card">
+
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Verification ID
+                            </th>
+
+                            <th>
+                                Document
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Risk
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="historyBody">
+
+                        <tr>
+
+                            <td colspan="6">
+                                Loading history...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+
+            </section>
+
+        </section>
+
+
+    </main>
+
+
+    <script>
+        /* ============================================================
+           CONFIG
+        ============================================================ */
+
+        var API_URL =
+            "http://127.0.0.1:8000";
+
+
+        /* ============================================================
+           ELEMENTS
+        ============================================================ */
+
+        var fileInput =
+            document.getElementById(
+                "fileInput"
+            );
+
+        var uploadArea =
+            document.getElementById(
+                "uploadArea"
+            );
+
+        var fileInfo =
+            document.getElementById(
+                "fileInfo"
+            );
+
+        var fileName =
+            document.getElementById(
+                "fileName"
+            );
+
+        var fileSize =
+            document.getElementById(
+                "fileSize"
+            );
+
+        var fileType =
+            document.getElementById(
+                "fileType"
+            );
+
+        var documentType =
+            document.getElementById(
+                "documentType"
+            );
+
+        var verifyButton =
+            document.getElementById(
+                "verifyButton"
+            );
+
+        var processing =
+            document.getElementById(
+                "processing"
+            );
+
+        var processingText =
+            document.getElementById(
+                "processingText"
+            );
+
+        var resultBox =
+            document.getElementById(
+                "resultBox"
+            );
+
+        var resultTitle =
+            document.getElementById(
+                "resultTitle"
+            );
+
+        var verificationId =
+            document.getElementById(
+                "verificationId"
+            );
+
+        var riskScore =
+            document.getElementById(
+                "riskScore"
+            );
+
+        var riskLevel =
+            document.getElementById(
+                "riskLevel"
+            );
+
+        var validationScore =
+            document.getElementById(
+                "validationScore"
+            );
+
+        var ocrConfidence =
+            document.getElementById(
+                "ocrConfidence"
+            );
+
+        var blacklistStatus =
+            document.getElementById(
+                "blacklistStatus"
+            );
+
+        var fieldList =
+            document.getElementById(
+                "fieldList"
+            );
+
+        var historyBody =
+            document.getElementById(
+                "historyBody"
+            );
+
+        var apiStatus =
+            document.getElementById(
+                "apiStatus"
+            );
+
+        var backendText =
+            document.getElementById(
+                "backendText"
+            );
+
+
+        /* ============================================================
+           FORMAT SIZE
+        ============================================================ */
+
+        function formatSize(
+            bytes
+        ) {
+
+            if (
+                bytes < 1024
+            ) {
+
+                return bytes +
+                    " Bytes";
+            }
+
+
+            if (
+                bytes < 1024 * 1024
+            ) {
+
+                return (
+                        bytes / 1024
+                    ).toFixed(1) +
+                    " KB";
+            }
+
+
+            return (
+                    bytes /
+                    (1024 * 1024)
+                ).toFixed(2) +
+                " MB";
+        }
+
+
+        /* ============================================================
+           FILE SELECT
+        ============================================================ */
+
+        fileInput.addEventListener(
+            "change",
+            function() {
+
+                if (!fileInput.files ||
+                    fileInput.files.length === 0
+                ) {
+
+                    verifyButton.disabled =
+                        true;
+
+                    fileInfo.classList.remove(
+                        "show"
+                    );
+
+                    return;
+                }
+
+
+                var file =
+                    fileInput.files[0];
+
+
+                handleSelectedFile(
+                    file
+                );
+            }
+        );
+
+
+        /* ============================================================
+           HANDLE FILE
+        ============================================================ */
+
+        function handleSelectedFile(
+            file
+        ) {
+
+            var allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+
+            if (
+                allowedTypes.indexOf(
+                    file.type
+                ) === -1
+            ) {
+
+                alert(
+                    "Please select JPG, PNG or WEBP."
+                );
+
+                fileInput.value =
+                    "";
+
+                verifyButton.disabled =
+                    true;
+
+                return;
+            }
+
+
+            if (
+                file.size >
+                10 * 1024 * 1024
+            ) {
+
+                alert(
+                    "Maximum file size is 10 MB."
+                );
+
+                fileInput.value =
+                    "";
+
+                verifyButton.disabled =
+                    true;
+
+                return;
+            }
+
+
+            fileName.textContent =
+                file.name;
+
+
+            fileSize.textContent =
+                formatSize(
+                    file.size
+                );
+
+
+            fileType.textContent =
+                file.type;
+
+
+            fileInfo.classList.add(
+                "show"
+            );
+
+
+            verifyButton.disabled =
+                false;
+
+
+            resultBox.classList.remove(
+                "show"
+            );
+        }
+
+
+        /* ============================================================
+           DRAG AND DROP
+        ============================================================ */
+
+        uploadArea.addEventListener(
+            "dragover",
+            function(event) {
+
+                event.preventDefault();
+
+                uploadArea.classList.add(
+                    "drag"
+                );
+            }
+        );
+
+
+        uploadArea.addEventListener(
+            "dragleave",
+            function() {
+
+                uploadArea.classList.remove(
+                    "drag"
+                );
+            }
+        );
+
+
+        uploadArea.addEventListener(
+            "drop",
+            function(event) {
+
+                event.preventDefault();
+
+                uploadArea.classList.remove(
+                    "drag"
+                );
+
+
+                var files =
+                    event.dataTransfer.files;
+
+
+                if (!files ||
+                    files.length === 0
+                ) {
+
+                    return;
+                }
+
+
+                handleSelectedFile(
+                    files[0]
+                );
+            }
+        );
+
+
+        /* ============================================================
+           SHOW PROCESSING
+        ============================================================ */
+
+        function showProcessing() {
+
+            processing.classList.add(
+                "show"
+            );
+
+            processingText.textContent =
+                "Sending document to FastAPI...";
+
+
+            resultBox.classList.remove(
+                "show"
+            );
+
+
+            verifyButton.disabled =
+                true;
+        }
+
+
+        /* ============================================================
+           SHOW RESULT
+        ============================================================ */
+
+        function showResult(
+            data
+        ) {
+
+            var risk =
+                data.risk || {};
+
+            var validation =
+                data.validation || {};
+
+            var blacklist =
+                data.blacklist || {};
+
+            var imageAnalysis =
+                data.image_analysis || {};
+
+            var ocr =
+                data.ocr || {};
+
+
+            resultTitle.className =
+                "result-title";
+
+
+            if (
+                risk.status ===
+                "VERIFIED"
+            ) {
+
+                resultTitle.classList.add(
+                    "success"
+                );
+
+            } else if (
+                risk.status ===
+                "REVIEW_REQUIRED"
+            ) {
+
+                resultTitle.classList.add(
+                    "warning"
+                );
+
+            } else {
+
+                resultTitle.classList.add(
+                    "danger"
+                );
+            }
+
+
+            resultTitle.textContent =
+                String(
+                    risk.status ||
+                    "COMPLETED"
+                ).replace(
+                    /_/g,
+                    " "
+                );
+
+
+            verificationId.textContent =
+                data.verification_id ||
+                "-";
+
+
+            riskScore.textContent =
+                risk.risk_score !== undefined ?
+                risk.risk_score :
+                "-";
+
+
+            riskLevel.textContent =
+                risk.risk_level ||
+                "-";
+
+
+            validationScore.textContent =
+                validation.score !== undefined ?
+                validation.score + "%" :
+                "-";
+
+
+            ocrConfidence.textContent =
+                ocr.average_confidence !== undefined ?
+                (
+                    Number(
+                        ocr.average_confidence
+                    ) * 100
+                ).toFixed(2) + "%" :
+                "-";
+
+
+            blacklistStatus.textContent =
+                blacklist.blacklisted ?
+                "MATCH FOUND" :
+                "No Match";
+
+
+            fieldList.innerHTML =
+                "";
+
+
+            var fields =
+                data.extracted_fields || {};
+
+
+            var keys =
+                Object.keys(
+                    fields
+                );
+
+
+            if (
+                keys.length === 0
+            ) {
+
+                fieldList.innerHTML =
+                    `
+            <div class="field">
+
+                <span>
+                    Fields
+                </span>
+
+                <strong>
+                    No fields detected
+                </strong>
+
+            </div>
+            `;
+
+            } else {
+
+                keys.forEach(
+                    function(key) {
+
+                        var row =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        row.className =
+                            "field";
+
+
+                        var label =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        label.textContent =
+                            formatFieldName(
+                                key
+                            );
+
+
+                        var value =
+                            document.createElement(
+                                "strong"
+                            );
+
+
+                        value.textContent =
+                            fields[key] ||
+                            "Not detected";
+
+
+                        row.appendChild(
+                            label
+                        );
+
+
+                        row.appendChild(
+                            value
+                        );
+
+
+                        fieldList.appendChild(
+                            row
+                        );
+
+                    }
+                );
+            }
+
+
+            resultBox.classList.add(
+                "show"
+            );
+
+
+            /* Save for reports page */
+
+            localStorage.setItem(
+                "verificationResult",
+                JSON.stringify(
+                    data
+                )
+            );
+
+
+            /* Reload history */
+
+            loadHistory();
+        }
+
+
+        /* ============================================================
+           FORMAT FIELD
+        ============================================================ */
+
+        function formatFieldName(
+            name
+        ) {
+
+            return String(
+                    name
+                )
+                .replace(
+                    /_/g,
+                    " "
+                )
+                .replace(
+                    /\b\w/g,
+                    function(letter) {
+
+                        return letter.toUpperCase();
+
+                    }
+                );
+        }
+
+
+        /* ============================================================
+           SHOW ERROR
+        ============================================================ */
+
+        function showError(
+            message
+        ) {
+
+            resultBox.classList.add(
+                "show"
+            );
+
+
+            resultTitle.className =
+                "result-title danger";
+
+
+            resultTitle.textContent =
+                "VERIFICATION ERROR";
+
+
+            fieldList.innerHTML =
+                "";
+
+
+            var row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "field";
+
+
+            var label =
+                document.createElement(
+                    "span"
+                );
+
+
+            label.textContent =
+                "Error";
+
+
+            var value =
+                document.createElement(
+                    "strong"
+                );
+
+
+            value.textContent =
+                message;
+
+
+            row.appendChild(
+                label
+            );
+
+
+            row.appendChild(
+                value
+            );
+
+
+            fieldList.appendChild(
+                row
+            );
+        }
+
+
+        /* ============================================================
+           VERIFY
+        ============================================================ */
+
+        verifyButton.addEventListener(
+            "click",
+            async function() {
+
+                if (!fileInput.files ||
+                    fileInput.files.length === 0
+                ) {
+
+                    alert(
+                        "Please select a document first."
+                    );
+
+                    return;
+                }
+
+
+                var file =
+                    fileInput.files[0];
+
+
+                var selectedType =
+                    documentType.value;
+
+
+                showProcessing();
+
+
+                try {
+
+
+                    /* ================================================
+                       FORM DATA
+                    ================================================= */
+
+                    var formData =
+                        new FormData();
+
+
+                    formData.append(
+                        "document_type",
+                        selectedType
+                    );
+
+
+                    formData.append(
+                        "file",
+                        file
+                    );
+
+
+                    processingText.textContent =
+                        "OCR and document analysis running...";
+
+
+                    /* ================================================
+                       API CALL
+                    ================================================= */
+
+                    var response =
+                        await fetch(
+                            API_URL +
+                            "/api/verify", {
+                                method: "POST",
+
+                                body: formData
+                            }
+                        );
+
+
+                    processingText.textContent =
+                        "Reading verification result...";
+
+
+                    var responseText =
+                        await response.text();
+
+
+                    var data;
+
+
+                    try {
+
+                        data =
+                            JSON.parse(
+                                responseText
+                            );
+
+                    } catch (error) {
+
+                        throw new Error(
+                            "Backend returned invalid JSON."
+                        );
+                    }
+
+
+                    /* ================================================
+                       HTTP ERROR
+                    ================================================= */
+
+                    if (!response.ok) {
+
+                        var message =
+                            "HTTP " +
+                            response.status;
+
+
+                        if (
+                            typeof data.detail ===
+                            "string"
+                        ) {
+
+                            message =
+                                data.detail;
+
+                        } else if (
+                            data.detail &&
+                            data.detail.message
+                        ) {
+
+                            message =
+                                data.detail.message;
+
+                        } else if (
+                            data.message
+                        ) {
+
+                            message =
+                                data.message;
+                        }
+
+
+                        throw new Error(
+                            message
+                        );
+                    }
+
+
+                    /* ================================================
+                       APPLICATION ERROR
+                    ================================================= */
+
+                    if (
+                        data.success !== true
+                    ) {
+
+                        throw new Error(
+                            data.error ||
+                            data.message ||
+                            "Verification failed."
+                        );
+                    }
+
+
+                    /* ================================================
+                       DISPLAY RESULT
+                    ================================================= */
+
+                    showResult(
+                        data
+                    );
+
+
+                    processingText.textContent =
+                        "Verification completed.";
+
+
+                } catch (error) {
+
+                    console.error(
+                        "VERISHIELD VERIFY ERROR:",
+                        error
+                    );
+
+
+                    showError(
+                        error.message
+                    );
+
+
+                    processingText.textContent =
+                        "Verification failed.";
+
+                } finally {
+
+                    processing.classList.remove(
+                        "show"
+                    );
+
+
+                    verifyButton.disabled =
+                        false;
+                }
+
+            }
+        );
+
+
+        /* ============================================================
+           BACKEND HEALTH
+        ============================================================ */
+
+        async function checkBackend() {
+
+            try {
+
+                var response =
+                    await fetch(
+                        API_URL +
+                        "/health", {
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Backend unavailable"
+                    );
+                }
+
+
+                apiStatus.textContent =
+                    "ONLINE";
+
+                apiStatus.classList.remove(
+                    "offline"
+                );
+
+
+                backendText.textContent =
+                    "Backend Online";
+
+            } catch (error) {
+
+                apiStatus.textContent =
+                    "OFFLINE";
+
+                apiStatus.classList.add(
+                    "offline"
+                );
+
+
+                backendText.textContent =
+                    "Backend Offline";
+
+
+                console.error(
+                    "Backend health:",
+                    error
+                );
+            }
+        }
+
+
+        /* ============================================================
+           HISTORY
+        ============================================================ */
+
+        async function loadHistory() {
+
+            try {
+
+                var response =
+                    await fetch(
+                        API_URL +
+                        "/api/history", {
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "History request failed"
+                    );
+                }
+
+
+                var records =
+                    await response.json();
+
+
+                if (!Array.isArray(
+                        records
+                    )) {
+
+                    records = [];
+                }
+
+
+                var verified = 0;
+                var review = 0;
+                var highRisk = 0;
+
+
+                records.forEach(
+                    function(record) {
+
+                        var status =
+                            String(
+                                record.status ||
+                                ""
+                            ).toUpperCase();
+
+
+                        if (
+                            status ===
+                            "VERIFIED"
+                        ) {
+
+                            verified++;
+
+                        } else if (
+                            status ===
+                            "REVIEW_REQUIRED" ||
+                            status ===
+                            "BLOCKED_REVIEW"
+                        ) {
+
+                            review++;
+
+                        } else if (
+                            status ===
+                            "HIGH_RISK"
+                        ) {
+
+                            highRisk++;
+                        }
+
+                    }
+                );
+
+
+                document.getElementById(
+                        "totalCount"
+                    ).textContent =
+                    records.length;
+
+
+                document.getElementById(
+                        "verifiedCount"
+                    ).textContent =
+                    verified;
+
+
+                document.getElementById(
+                        "reviewCount"
+                    ).textContent =
+                    review;
+
+
+                document.getElementById(
+                        "highRiskCount"
+                    ).textContent =
+                    highRisk;
+
+
+                renderHistory(
+                    records
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "History error:",
+                    error
+                );
+
+
+                historyBody.innerHTML =
+                    `
+            <tr>
+                <td colspan="6">
+                    Backend history unavailable.
+                </td>
+            </tr>
+            `;
+            }
+        }
+
+
+        /* ============================================================
+           RENDER HISTORY
+        ============================================================ */
+
+        function renderHistory(
+            records
+        ) {
+
+            if (
+                records.length === 0
+            ) {
+
+                historyBody.innerHTML =
+                    `
+            <tr>
+                <td colspan="6">
+                    No verification records yet.
+                </td>
+            </tr>
+            `;
+
+                return;
+            }
+
+
+            historyBody.innerHTML =
+                "";
+
+
+            records
+                .slice(
+                    0,
+                    8
+                )
+                .forEach(
+                    function(record) {
+
+                        var row =
+                            document.createElement(
+                                "tr"
+                            );
+
+
+                        var status =
+                            String(
+                                record.status ||
+                                ""
+                            ).toUpperCase();
+
+
+                        var badgeClass =
+                            "warning-badge";
+
+
+                        if (
+                            status ===
+                            "VERIFIED"
+                        ) {
+
+                            badgeClass =
+                                "success-badge";
+
+                        } else if (
+                            status ===
+                            "HIGH_RISK" ||
+                            status ===
+                            "BLOCKED_REVIEW"
+                        ) {
+
+                            badgeClass =
+                                "danger-badge";
+                        }
+
+
+                        row.innerHTML =
+                            `
+                    <td>
+                        ${escapeHtml(
+                            record.verification_id ||
+                            "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            formatDocumentType(
+                                record.document_type
+                            )
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            record.name ||
+                            "Not detected"
+                        )}
+                    </td>
+
+                    <td>
+                        <span class="badge ${badgeClass}">
+                            ${escapeHtml(
+                                status.replace(
+                                    /_/g,
+                                    " "
+                                )
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            record.risk_score !== undefined &&
+                            record.risk_score !== null
+                                ? record.risk_score
+                                : "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            formatDate(
+                                record.created_at
+                            )
+                        )}
+                    </td>
+                    `;
+
+
+                        historyBody.appendChild(
+                            row
+                        );
+
+                    }
+                );
+        }
+
+
+        /* ============================================================
+           HELPERS
+        ============================================================ */
+
+        function formatDocumentType(
+            value
+        ) {
+
+            if (!value) {
+
+                return "Unknown";
+            }
+
+
+            return String(value)
+                .replace(
+                    /_/g,
+                    " "
+                )
+                .replace(
+                    /\b\w/g,
+                    function(letter) {
+                        return letter.toUpperCase();
+                    }
+                );
+        }
+
+
+        function formatDate(
+            value
+        ) {
+
+            if (!value) {
+
+                return "-";
+            }
+
+
+            var date =
+                new Date(value);
+
+
+            if (
+                isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return value;
+            }
+
+
+            return date.toLocaleString();
+        }
+
+
+        function escapeHtml(
+            value
+        ) {
+
+            return String(
+                    value === null ||
+                    value === undefined ?
+                    "" :
+                    value
+                )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+        }
+
+
+        /* ============================================================
+           START
+        ============================================================ */
+
+        checkBackend();
+
+        loadHistory();
+
+
+        setInterval(
+            checkBackend,
+            10000
+        );
+
+
+        setInterval(
+            loadHistory,
+            15000
+        );
+    </script>
+
+</body>
+
+</html>

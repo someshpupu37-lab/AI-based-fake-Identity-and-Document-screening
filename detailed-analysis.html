@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Detailed Analysis - VeriShield
+    </title>
+
+
+    <style>
+        /* =========================================
+           RESET
+        ========================================== */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+        
+        button {
+            font-family: inherit;
+        }
+        /* =========================================
+           SIDEBAR
+        ========================================== */
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: #111827;
+            color: white;
+            padding: 25px 16px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 40px;
+        }
+        
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #2563eb;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .logo-text h2 {
+            font-size: 18px;
+        }
+        
+        .logo-text p {
+            margin-top: 3px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+        
+        .nav-title {
+            margin: 22px 12px 10px;
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 12px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        
+        .nav-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+        
+        .nav-item.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+        /* =========================================
+           SYSTEM STATUS
+        ========================================== */
+        
+        .sidebar-bottom {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 25px;
+        }
+        
+        .system-status {
+            padding: 14px;
+            background: #1f2937;
+            border-radius: 10px;
+            color: #d1d5db;
+            font-size: 12px;
+        }
+        
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+        /* =========================================
+           MAIN
+        ========================================== */
+        
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 30px 40px;
+        }
+        /* =========================================
+           TOP BAR
+        ========================================== */
+        
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .page-title h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+        
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .btn-secondary {
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+        }
+        
+        .btn-primary {
+            border: none;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+        }
+        /* =========================================
+           VERIFICATION INFO
+        ========================================== */
+        
+        .info-banner {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+        
+        .verification-details {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .detail-item span {
+            display: block;
+            color: #6b7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .detail-item strong {
+            font-size: 13px;
+        }
+        
+        .overall-status {
+            padding: 8px 14px;
+            background: #dcfce7;
+            color: #15803d;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        /* =========================================
+           ANALYSIS CARDS
+        ========================================== */
+        
+        .analysis-stack {
+            display: grid;
+            gap: 18px;
+        }
+        
+        .analysis-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .analysis-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .analysis-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #2563eb;
+            border-radius: 9px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .analysis-title h2 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .analysis-title p {
+            color: #6b7280;
+            font-size: 11px;
+        }
+        
+        .analysis-score {
+            text-align: right;
+        }
+        
+        .analysis-score strong {
+            display: block;
+            font-size: 23px;
+            color: #15803d;
+        }
+        
+        .analysis-score span {
+            color: #6b7280;
+            font-size: 10px;
+        }
+        
+        .analysis-body {
+            padding: 20px 22px;
+        }
+        /* =========================================
+           PROGRESS
+        ========================================== */
+        
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .score-row span {
+            color: #6b7280;
+        }
+        
+        .score-row strong {
+            color: #172033;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 8px;
+            border-radius: 10px;
+            background: #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: #22c55e;
+        }
+        /* =========================================
+           FINDINGS
+        ========================================== */
+        
+        .findings-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .findings {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .finding {
+            display: flex;
+            gap: 9px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        
+        .finding-icon {
+            width: 23px;
+            height: 23px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .finding p {
+            color: #4b5563;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+        /* =========================================
+           OCR DATA
+        ========================================== */
+        
+        .ocr-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .ocr-table th {
+            background: #f8fafc;
+            color: #6b7280;
+            text-align: left;
+            padding: 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        
+        .ocr-table td {
+            border-top: 1px solid #f1f5f9;
+            padding: 11px 10px;
+            font-size: 12px;
+        }
+        
+        .confidence {
+            font-weight: bold;
+            color: #15803d;
+        }
+        /* =========================================
+           TAMPERING SECTION
+        ========================================== */
+        
+        .tampering-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .tamper-panel {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        
+        .tamper-panel h3 {
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        
+        .document-placeholder {
+            width: 100%;
+            height: 230px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .document-placeholder::before {
+            content: "";
+            position: absolute;
+            width: 65%;
+            height: 70%;
+            border: 2px dashed #94a3b8;
+            border-radius: 6px;
+        }
+        
+        .tamper-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 10px;
+            border-radius: 15px;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .anomaly-list {
+            display: grid;
+            gap: 9px;
+        }
+        
+        .anomaly {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 10px;
+            background: #f8fafc;
+            border-radius: 7px;
+            font-size: 11px;
+        }
+        
+        .anomaly span {
+            color: #64748b;
+        }
+        
+        .anomaly strong {
+            color: #15803d;
+        }
+        /* =========================================
+           FACE VERIFICATION
+        ========================================== */
+        
+        .face-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .face-box {
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px;
+        }
+        
+        .face-placeholder {
+            width: 100px;
+            height: 100px;
+            margin: auto;
+            margin-bottom: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .face-box h4 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .face-box p {
+            color: #6b7280;
+            font-size: 10px;
+        }
+        
+        .match-score {
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #15803d;
+        }
+        /* =========================================
+           RISK CALCULATION
+        ========================================== */
+        
+        .risk-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 25px;
+            align-items: center;
+        }
+        
+        .risk-summary {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f0fdf4;
+        }
+        
+        .risk-number {
+            font-size: 45px;
+            font-weight: bold;
+            color: #15803d;
+        }
+        
+        .risk-summary p {
+            color: #6b7280;
+            font-size: 11px;
+        }
+        
+        .risk-level {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .factor {
+            margin-bottom: 15px;
+        }
+        
+        .factor:last-child {
+            margin-bottom: 0;
+        }
+        
+        .factor-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+        
+        .factor-header span {
+            color: #6b7280;
+        }
+        
+        .factor-header strong {
+            color: #172033;
+        }
+        /* =========================================
+           EXPLANATION
+        ========================================== */
+        
+        .explanation {
+            margin-top: 22px;
+            padding: 16px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 9px;
+            font-size: 11px;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        /* =========================================
+           RESPONSIVE
+        ========================================== */
+        
+        @media (max-width: 950px) {
+            .findings {
+                grid-template-columns: 1fr;
+            }
+            .tampering-grid {
+                grid-template-columns: 1fr;
+            }
+            .face-grid {
+                grid-template-columns: 1fr;
+            }
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .sidebar-bottom {
+                display: none;
+            }
+            .nav-title {
+                display: none;
+            }
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .info-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .verification-details {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ID
+            </div>
+
+
+            <div class="logo-text">
+
+                <h2>
+                    VeriShield
+                </h2>
+
+                <p>
+                    SIH26188
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-title">
+            Main Menu
+        </div>
+
+
+        <a href="index.html" class="nav-item">
+
+            <div class="nav-icon">
+                ▦
+            </div>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="verification.html" class="nav-item">
+
+            <div class="nav-icon">
+                ✓
+            </div>
+
+            <span>
+                Verification
+            </span>
+
+        </a>
+
+
+        <a href="history.html" class="nav-item">
+
+            <div class="nav-icon">
+                ◉
+            </div>
+
+            <span>
+                History
+            </span>
+
+        </a>
+
+
+        <a href="reports.html" class="nav-item">
+
+            <div class="nav-icon">
+                ▤
+            </div>
+
+            <span>
+                Reports
+            </span>
+
+        </a>
+
+
+        <div class="nav-title">
+            Analysis
+        </div>
+
+
+        <a href="detailed-analysis.html" class="nav-item active">
+
+            <div class="nav-icon">
+                ◇
+            </div>
+
+            <span>
+                Detailed Analysis
+            </span>
+
+        </a>
+
+
+        <div class="nav-title">
+            System
+        </div>
+
+
+        <a href="#" class="nav-item">
+
+            <div class="nav-icon">
+                ⚙
+            </div>
+
+            <span>
+                Settings
+            </span>
+
+        </a>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <div class="status-row">
+
+                    <div class="status-dot"></div>
+
+                    System Online
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="topbar">
+
+
+            <div class="page-title">
+
+                <h1>
+                    Detailed Analysis
+                </h1>
+
+                <p>
+                    Explainable verification results and AI findings
+                </p>
+
+            </div>
+
+
+            <div class="top-actions">
+
+
+                <button class="btn btn-secondary" onclick="goBack()">
+                    ← Back
+                </button>
+
+
+                <a href="report.html" class="btn btn-primary">
+                    View Report
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             VERIFICATION INFO
+        ========================================== -->
+
+        <section class="info-banner">
+
+
+            <div class="verification-details">
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Verification ID
+                    </span>
+
+                    <strong id="verificationId">
+                        VS-2026-000184
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Document
+                    </span>
+
+                    <strong>
+                        Sample Identity Document
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Analysis Date
+                    </span>
+
+                    <strong>
+                        08 September 2026
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Model Version
+                    </span>
+
+                    <strong>
+                        VeriShield AI v1.0
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="overall-status">
+                ✓ VERIFICATION PASSED
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             ANALYSIS STACK
+        ========================================== -->
+
+        <div class="analysis-stack">
+
+
+
+            <!-- =====================================
+                 OCR ANALYSIS
+            ====================================== -->
+
+            <section class="analysis-card">
+
+
+                <div class="analysis-header">
+
+
+                    <div class="analysis-title">
+
+
+                        <div class="analysis-icon">
+                            A
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                OCR Extraction
+                            </h2>
+
+                            <p>
+                                Optical character recognition analysis
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="analysis-score">
+
+                        <strong>
+                            98%
+                        </strong>
+
+                        <span>
+                            Confidence
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="analysis-body">
+
+
+                    <div class="score-row">
+
+                        <span>
+                            Extraction confidence
+                        </span>
+
+                        <strong>
+                            98 / 100
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:98%;"></div>
+
+                    </div>
+
+
+
+                    <div class="findings-title">
+                        Extracted fields
+                    </div>
+
+
+                    <table class="ocr-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Field
+                                </th>
+
+                                <th>
+                                    Detected Value
+                                </th>
+
+                                <th>
+                                    Confidence
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    Name
+                                </td>
+
+                                <td>
+                                    Rahul Sharma
+                                </td>
+
+                                <td class="confidence">
+                                    99%
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Date of Birth
+                                </td>
+
+                                <td>
+                                    15 August 1998
+                                </td>
+
+                                <td class="confidence">
+                                    98%
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Document Number
+                                </td>
+
+                                <td>
+                                    DEMO-XXXX-1234
+                                </td>
+
+                                <td class="confidence">
+                                    97%
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Document Type
+                                </td>
+
+                                <td>
+                                    Sample Identity Document
+                                </td>
+
+                                <td class="confidence">
+                                    98%
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =====================================
+                 DOCUMENT VALIDATION
+            ====================================== -->
+
+            <section class="analysis-card">
+
+
+                <div class="analysis-header">
+
+
+                    <div class="analysis-title">
+
+
+                        <div class="analysis-icon">
+                            D
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Document Validation
+                            </h2>
+
+                            <p>
+                                Structure and field consistency analysis
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="analysis-score">
+
+                        <strong>
+                            96%
+                        </strong>
+
+                        <span>
+                            Validity
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="analysis-body">
+
+
+                    <div class="score-row">
+
+                        <span>
+                            Validation confidence
+                        </span>
+
+                        <strong>
+                            96 / 100
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" style="width:96%;"></div>
+
+                    </div>
+
+
+                    <div class="findings">
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                Required fields were identified successfully.
+                            </p>
+
+                        </div>
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                Field formats are consistent with the sample template.
+                            </p>
+
+                        </div>
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                No missing mandatory information detected.
+                            </p>
+
+                        </div>
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                Date fields passed logical validation.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =====================================
+                 TAMPERING
+            ====================================== -->
+
+            <section class="analysis-card">
+
+
+                <div class="analysis-header">
+
+
+                    <div class="analysis-title">
+
+
+                        <div class="analysis-icon">
+                            T
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Tampering Detection
+                            </h2>
+
+                            <p>
+                                Image integrity and anomaly analysis
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="analysis-score">
+
+                        <strong>
+                            91%
+                        </strong>
+
+                        <span>
+                            Integrity
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="analysis-body">
+
+
+                    <div class="tampering-grid">
+
+
+                        <div class="tamper-panel">
+
+
+                            <h3>
+                                Document Analysis
+                            </h3>
+
+
+                            <div class="document-placeholder">
+
+                                Sample Document Analysis Preview
+
+                            </div>
+
+
+                            <span class="tamper-badge">
+                                ✓ NO MAJOR ANOMALY
+                            </span>
+
+
+                        </div>
+
+
+                        <div class="tamper-panel">
+
+
+                            <h3>
+                                Detected Indicators
+                            </h3>
+
+
+                            <div class="anomaly-list">
+
+
+                                <div class="anomaly">
+
+                                    <span>
+                                        Compression consistency
+                                    </span>
+
+                                    <strong>
+                                        PASS
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="anomaly">
+
+                                    <span>
+                                        Edge consistency
+                                    </span>
+
+                                    <strong>
+                                        PASS
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="anomaly">
+
+                                    <span>
+                                        Copy-paste indicators
+                                    </span>
+
+                                    <strong>
+                                        NONE
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="anomaly">
+
+                                    <span>
+                                        Suspicious region count
+                                    </span>
+
+                                    <strong>
+                                        0
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="anomaly">
+
+                                    <span>
+                                        Image structure
+                                    </span>
+
+                                    <strong>
+                                        PASS
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =====================================
+                 FACE VERIFICATION
+            ====================================== -->
+
+            <section class="analysis-card">
+
+
+                <div class="analysis-header">
+
+
+                    <div class="analysis-title">
+
+
+                        <div class="analysis-icon">
+                            F
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Face Verification
+                            </h2>
+
+                            <p>
+                                Authorized face comparison analysis
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="analysis-score">
+
+                        <strong>
+                            94%
+                        </strong>
+
+                        <span>
+                            Similarity
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="analysis-body">
+
+
+                    <div class="face-grid">
+
+
+                        <div class="face-box">
+
+
+                            <div class="face-placeholder">
+                                ID
+                            </div>
+
+
+                            <h4>
+                                Document Face
+                            </h4>
+
+
+                            <p>
+                                Face extracted from sample document
+                            </p>
+
+
+                        </div>
+
+
+                        <div class="face-box">
+
+
+                            <div class="face-placeholder">
+                                U
+                            </div>
+
+
+                            <h4>
+                                Verification Face
+                            </h4>
+
+
+                            <p>
+                                Authorized comparison sample
+                            </p>
+
+
+                        </div>
+
+
+                        <div class="face-box">
+
+
+                            <div class="face-placeholder">
+                                ✓
+                            </div>
+
+
+                            <h4>
+                                Match Result
+                            </h4>
+
+
+                            <p>
+                                Similarity exceeds prototype threshold
+                            </p>
+
+
+                            <div class="match-score">
+                                94%
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =====================================
+                 DATA CONSISTENCY
+            ====================================== -->
+
+            <section class="analysis-card">
+
+
+                <div class="analysis-header">
+
+
+                    <div class="analysis-title">
+
+
+                        <div class="analysis-icon">
+                            C
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Data Consistency
+                            </h2>
+
+                            <p>
+                                Cross-field consistency analysis
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="analysis-score">
+
+                        <strong>
+                            97%
+                        </strong>
+
+                        <span>
+                            Consistency
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="analysis-body">
+
+
+                    <div class="findings">
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                Name field format is consistent.
+                            </p>
+
+                        </div>
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                Date information passes logical consistency checks.
+                            </p>
+
+                        </div>
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                Document number matches the expected sample format.
+                            </p>
+
+                        </div>
+
+
+                        <div class="finding">
+
+                            <div class="finding-icon">
+                                ✓
+                            </div>
+
+                            <p>
+                                No conflicting fields were identified.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =====================================
+                 RISK CALCULATION
+            ====================================== -->
+
+            <section class="analysis-card">
+
+
+                <div class="analysis-header">
+
+
+                    <div class="analysis-title">
+
+
+                        <div class="analysis-icon">
+                            R
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Risk Calculation
+                            </h2>
+
+                            <p>
+                                Combined prototype screening assessment
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="analysis-score">
+
+                        <strong>
+                            LOW
+                        </strong>
+
+                        <span>
+                            Final Risk
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="analysis-body">
+
+
+                    <div class="risk-grid">
+
+
+                        <div class="risk-summary">
+
+
+                            <div class="risk-number">
+                                18
+                            </div>
+
+
+                            <p>
+                                Overall Risk Score / 100
+                            </p>
+
+
+                            <span class="risk-level">
+                                LOW RISK
+                            </span>
+
+
+                        </div>
+
+
+                        <div>
+
+
+                            <div class="factor">
+
+
+                                <div class="factor-header">
+
+                                    <span>
+                                        OCR reliability
+                                    </span>
+
+                                    <strong>
+                                        98%
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="progress">
+
+                                    <div class="progress-bar" style="width:98%;"></div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="factor">
+
+
+                                <div class="factor-header">
+
+                                    <span>
+                                        Document validity
+                                    </span>
+
+                                    <strong>
+                                        96%
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="progress">
+
+                                    <div class="progress-bar" style="width:96%;"></div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="factor">
+
+
+                                <div class="factor-header">
+
+                                    <span>
+                                        Image integrity
+                                    </span>
+
+                                    <strong>
+                                        91%
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="progress">
+
+                                    <div class="progress-bar" style="width:91%;"></div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="factor">
+
+
+                                <div class="factor-header">
+
+                                    <span>
+                                        Face similarity
+                                    </span>
+
+                                    <strong>
+                                        94%
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="progress">
+
+                                    <div class="progress-bar" style="width:94%;"></div>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="explanation">
+
+                        <strong>
+                            Explainable Result:
+                        </strong> The prototype assigns a low-risk result because the configured screening checks show high confidence, no major simulated tampering indicators, acceptable face similarity, and consistent extracted
+                        information. In the final implementation, these values will be calculated from the backend AI pipeline rather than being hardcoded.
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+        /* =========================================
+                                   LOAD VERIFICATION ID
+                                ========================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+
+                const savedId =
+                    localStorage.getItem(
+                        "selectedVerificationId"
+                    );
+
+
+                if (savedId) {
+
+                    document
+                        .getElementById(
+                            "verificationId"
+                        )
+                        .textContent =
+                        savedId;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           BACK
+        ========================================== */
+
+        function goBack() {
+
+            window.history.back();
+
+        }
+    </script>
+
+
+</body>
+
+</html>
